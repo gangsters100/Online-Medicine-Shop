@@ -32,6 +32,13 @@ Medicine-Shop/
 - [API Contract](/docs/API_CONTRACT.md)
 - [Architecture](/docs/ARCHITECTURE.md)
 - [Learning Log](/docs/LEARNING_LOG.md)
+- [Code Review Guide](/docs/CODE_REVIEW_GUIDE.md)
+
+## Screenshots
+*To be added as the frontend matures.*
+
+## Live Deployment
+*To be added upon deployment.*
 
 ---
 *Created by: Soham Shinde, Arindam Sarkar, Adithya H K, Muhammad Abrar Aamir Sheikh*
