@@ -5,36 +5,36 @@
 ```mermaid
 flowchart TB
     Customer[Customer / Admin Browser]
-    React[React + Vite + TypeScript<br/>Frontend]
+    Frontend[Vanilla HTML/CSS/JS<br/>Frontend]
     API[Spring Boot REST API]
     DB[(PostgreSQL)]
     Cloudinary[Cloudinary<br/>Product image storage]
     Google[Google OAuth]
     Resend[Resend<br/>Order & password emails]
 
-    Customer --> React
-    React -->|HTTPS JSON API| API
-    React -->|Google sign-in redirect| Google
+    Customer --> Frontend
+    Frontend -->|HTTPS JSON API| API
+    Frontend -->|Google sign-in redirect| Google
     Google -->|OAuth callback| API
 
     API --> DB
     API -->|Manage image assets| Cloudinary
     API -->|Order confirmation & reset emails| Resend
 
-    API -->|Authorized product/user data| React
-    React -->|Authenticated user profile/cart| React
+    API -->|Authorized product/user data| Frontend
+    Frontend -->|Authenticated user profile/cart| Frontend
 ```
 
 ## Frontend architecture
 
-Use React as a single-page application (eventually), currently organized by feature folders to ensure modularity.
+Use modular Vanilla JavaScript (ES6 Modules) organized by feature to ensure modularity.
 
 - **Authentication:** registration, email verification, login, Google sign-in, password reset, token/session handling, protected routes.
 - **Catalog:** searchable/filterable inventory using category, brand, price, and stock availability.
 - **Cart & Checkout:** persistent cart state, address management, payment integration placeholder, and order summary.
 - **User Dashboard:** order history, personal address book, and profile settings.
 - **Admin:** product management (CRUD), stock monitoring, and order status updates.
-- **Shared layer:** typed API client, authentication state, reusable UI components, error handling, loading states.
+- **Shared layer:** modular API client, authentication state, reusable UI components, error handling, loading states.
 
 ## Backend architecture
 
@@ -97,14 +97,14 @@ erDiagram
 
 ### Product Discovery
 1. Customer filters inventory by category/price.
-2. React requests products from Spring Boot.
+2. Frontend requests products from Spring Boot (via modular API service).
 3. Spring Boot returns products with stock status and images.
 
 ### Checkout
-1. Customer adds items to cart (managed in LocalStorage/State).
-2. Customer proceeds to checkout; React posts order to Spring Boot.
+1. Customer adds items to cart (managed in LocalStorage / cart.js).
+2. Customer proceeds to checkout; Frontend posts order to Spring Boot.
 3. Backend validates stock, creates ORDER, deducts stock, and sends email via Resend.
-4. React clears cart state.
+4. Frontend clears cart state.
 
 ## Security & Reliability
 
