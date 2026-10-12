@@ -7,14 +7,17 @@
 /**
  * Format currency helper
  */
+/**
+ * Format currency helper (Indian Rupee ₹)
+ */
 export function formatCurrency(amount) {
-  return `$${Number(amount).toFixed(2)}`;
+  return `₹${Number(amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 /**
  * Fallback SVG image for product when image URL fails to load
  */
-const DEFAULT_PRODUCT_IMAGE_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="225" viewBox="0 0 300 225" fill="%23f1f5f9"><rect width="300" height="225" fill="%23f1f5f9"/><path d="M150 90v45M127.5 112.5h45" stroke="%230d9488" stroke-width="6" stroke-linecap="round"/><circle cx="150" cy="112.5" r="40" stroke="%230d9488" stroke-width="3" fill="none"/><text x="150" y="180" font-family="sans-serif" font-size="14" fill="%2364748b" text-anchor="middle" font-weight="600">Medicine Shop</text></svg>`;
+const DEFAULT_PRODUCT_IMAGE_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="225" viewBox="0 0 300 225" fill="%23f8fafc"><rect width="300" height="225" fill="%23f8fafc"/><rect x="85" y="45" width="130" height="135" rx="10" fill="%23ffffff" stroke="%230d9488" stroke-width="2"/><path d="M150 85v40M130 105h40" stroke="%230d9488" stroke-width="5" stroke-linecap="round"/><circle cx="150" cy="105" r="32" stroke="%230d9488" stroke-width="2" fill="none"/><text x="150" y="160" font-family="sans-serif" font-size="12" fill="%2364748b" text-anchor="middle" font-weight="700">MEDICINE PACK</text></svg>`;
 
 /**
  * Render Product Grid
@@ -36,7 +39,7 @@ export function renderProducts(products, containerSelector = '#product-container
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
         <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">No Medicines Found</h3>
-        <p style="color: var(--text-light); max-width: 400px; margin: 0 auto 16px;">Try adjusting your search query or selecting a different medicine category.</p>
+        <p style="color: var(--text-light); max-width: 400px; margin: 0 auto 16px;">Try searching for generic salt names (e.g. Paracetamol, Metformin) or popular Indian brands (Dolo 650, Crocin, Becosules).</p>
         <button class="btn btn-outline-primary btn-sm" id="btn-reset-filters">View All Medicines</button>
       </div>
     `;
@@ -50,6 +53,23 @@ export function renderProducts(products, containerSelector = '#product-container
       ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
       : 0;
 
+    let badgeMarkup = '';
+    if (product.isScheduleH1) {
+      badgeMarkup += `<span class="badge badge-schedule-h" title="Schedule H1 Drug - Doctor Prescription Mandatory">Schedule H1 Rx</span>`;
+    } else if (product.isScheduleH) {
+      badgeMarkup += `<span class="badge badge-schedule-h" title="Schedule H Drug - Doctor Prescription Mandatory">Schedule H Rx</span>`;
+    } else if (isRx) {
+      badgeMarkup += `<span class="badge badge-rx" title="Doctor Prescription Required">Rx Required</span>`;
+    } else if (product.isAyurvedic) {
+      badgeMarkup += `<span class="badge badge-ayurvedic">100% Ayurvedic</span>`;
+    } else {
+      badgeMarkup += `<span class="badge badge-otc">OTC Medicine</span>`;
+    }
+
+    if (hasDiscount) {
+      badgeMarkup += `<span class="badge badge-discount">-${discountPercent}% OFF</span>`;
+    }
+
     return `
       <article class="product-card" data-product-id="${product.id}">
         <div class="product-img-wrap">
@@ -61,8 +81,7 @@ export function renderProducts(products, containerSelector = '#product-container
             onerror="this.onerror=null; this.src='${DEFAULT_PRODUCT_IMAGE_SVG}';"
           />
           <div class="product-badges">
-            ${isRx ? `<span class="badge badge-rx" title="Valid Doctor Prescription Required">Rx Required</span>` : `<span class="badge badge-otc">OTC</span>`}
-            ${hasDiscount ? `<span class="badge badge-discount">-${discountPercent}%</span>` : ''}
+            ${badgeMarkup}
           </div>
         </div>
 
@@ -79,13 +98,13 @@ export function renderProducts(products, containerSelector = '#product-container
           <div class="product-rating">
             <span>★</span>
             <span style="font-weight: 700; color: var(--text-main);">${product.rating || '4.8'}</span>
-            <span class="rating-count">(${product.reviewsCount || '100+'})</span>
+            <span class="rating-count">(${product.reviewsCount || '100+'} verified)</span>
           </div>
 
           <div class="product-footer">
             <div class="price-box">
               <span class="price-current">${formatCurrency(product.price)}</span>
-              ${hasDiscount ? `<span class="price-original">${formatCurrency(product.originalPrice)}</span>` : ''}
+              ${hasDiscount ? `<span class="price-original">MRP ${formatCurrency(product.originalPrice)}</span>` : ''}
             </div>
 
             <button 
@@ -386,36 +405,43 @@ export function closeModal() {
 /**
  * Quick View Product Detail Modal
  */
+/**
+ * Quick View Product Detail Modal
+ */
 export function openProductQuickView(product, onAddToCart) {
-  const isRx = Boolean(product.prescriptionRequired);
+  const isRx = Boolean(product.prescriptionRequired || product.isScheduleH || product.isScheduleH1);
   const bodyHtml = `
     <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; align-items: start;">
-      <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); background: #f8fafc;">
+      <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); background: radial-gradient(circle at center, #ffffff 40%, #f8fafc 100%); padding: 18px; display: flex; align-items: center; justify-content: center; height: 250px;">
         <img 
           src="${product.imageUrl || DEFAULT_PRODUCT_IMAGE_SVG}" 
           alt="${escapeHtml(product.name)}" 
-          style="width: 100%; height: 240px; object-fit: cover;"
+          style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));"
           onerror="this.src='${DEFAULT_PRODUCT_IMAGE_SVG}';"
         />
       </div>
       <div>
-        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-          ${isRx ? `<span class="badge badge-rx">Rx Required</span>` : `<span class="badge badge-otc">OTC Medicine</span>`}
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+          ${product.isScheduleH1 ? `<span class="badge badge-schedule-h">Schedule H1 Rx</span>` : ''}
+          ${product.isScheduleH ? `<span class="badge badge-schedule-h">Schedule H Rx</span>` : ''}
+          ${!product.isScheduleH && !product.isScheduleH1 && isRx ? `<span class="badge badge-rx">Rx Required</span>` : ''}
+          ${product.isAyurvedic ? `<span class="badge badge-ayurvedic">100% Ayurvedic</span>` : ''}
+          ${!isRx && !product.isAyurvedic ? `<span class="badge badge-otc">OTC Medicine</span>` : ''}
           <span class="badge badge-category">${escapeHtml(product.category)}</span>
         </div>
-        <p style="font-size: 12px; font-weight: 700; color: var(--primary-color); margin-bottom: 4px;">${escapeHtml(product.brand)}</p>
-        <h4 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); line-height: 1.3; margin-bottom: 8px;">${escapeHtml(product.name)}</h4>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Dosage: ${escapeHtml(product.dosage || 'Standard Pack')}</p>
+        <p style="font-size: 12px; font-weight: 700; color: var(--primary-color); text-transform: uppercase; margin-bottom: 4px;">${escapeHtml(product.brand)}</p>
+        <h4 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); line-height: 1.3; margin-bottom: 6px;">${escapeHtml(product.name)}</h4>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Packaging: ${escapeHtml(product.dosage || 'Standard Pack')}</p>
         <p style="font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 16px;">${escapeHtml(product.description)}</p>
         
         <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px;">
           <span style="font-size: 1.75rem; font-weight: 800; color: var(--text-main);">${formatCurrency(product.price)}</span>
-          ${product.originalPrice ? `<span style="font-size: 14px; color: var(--text-muted); text-decoration: line-through;">${formatCurrency(product.originalPrice)}</span>` : ''}
+          ${product.originalPrice ? `<span style="font-size: 14px; color: var(--text-muted); text-decoration: line-through;">MRP ${formatCurrency(product.originalPrice)}</span>` : ''}
         </div>
 
         ${isRx ? `
-          <div style="padding: 10px 14px; background: var(--warning-light); border-left: 4px solid var(--warning-color); border-radius: 6px; font-size: 12px; color: #92400e; margin-bottom: 16px;">
-            ⚠️ This is a scheduled medicine. You must provide a valid doctor's prescription during checkout.
+          <div style="padding: 12px 14px; background: #fee2e2; border-left: 4px solid #dc2626; border-radius: 6px; font-size: 12px; color: #991b1b; margin-bottom: 16px; line-height: 1.5;">
+            <strong>⚠️ Schedule H/H1 Regulatory Warning:</strong> In compliance with the Drugs and Cosmetics Act (Govt. of India), this medicine requires a valid prescription from a Registered Medical Practitioner (RMP).
           </div>
         ` : ''}
       </div>
@@ -427,7 +453,7 @@ export function openProductQuickView(product, onAddToCart) {
     bodyHtml,
     footerButtons: [
       {
-        text: 'Cancel',
+        text: 'Close',
         className: 'btn btn-outline btn-sm',
         onClick: closeModal
       },
@@ -443,22 +469,28 @@ export function openProductQuickView(product, onAddToCart) {
 }
 
 /**
- * Prescription Upload Modal
+ * Prescription Upload Modal (Indian Market Compliant)
  */
 export function openPrescriptionUploadModal(onUploadSuccess) {
   const bodyHtml = `
     <div style="text-align: center;">
-      <p style="font-size: 14px; color: var(--text-light); margin-bottom: 20px;">
-        Upload a clear photo or PDF scan of your doctor's valid prescription. Our registered pharmacists will verify it before preparing your order.
+      <p style="font-size: 14px; color: var(--text-light); margin-bottom: 16px; line-height: 1.5;">
+        Upload a clear photo or PDF scan of your doctor's valid prescription (RMP). Our certified pharmacists will verify the dosage before preparing your order.
       </p>
 
-      <div id="rx-dropzone" style="border: 2px dashed var(--primary-color); border-radius: 12px; padding: 32px 16px; background: var(--primary-subtle); cursor: pointer; transition: all 0.2s;">
+      <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;">
+        <span class="badge" style="background: #e0f2fe; color: #0369a1; font-size: 11px;">✓ PCI Certified Review</span>
+        <span class="badge" style="background: #dcfce7; color: #166534; font-size: 11px;">✓ Govt. Drugs Act Compliant</span>
+        <span class="badge" style="background: #f1f5f9; color: #475569; font-size: 11px;">✓ 100% Confidential</span>
+      </div>
+
+      <div id="rx-dropzone" style="border: 2px dashed var(--primary-color); border-radius: 12px; padding: 28px 16px; background: var(--primary-subtle); cursor: pointer; transition: all 0.2s;">
         <svg viewBox="0 0 24 24" width="44" height="44" stroke="var(--primary-color)" stroke-width="2" fill="none" style="margin: 0 auto 12px; display: block;">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="17 8 12 3 7 8"/>
           <line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
-        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Click to select file or drag & drop</p>
+        <p style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Click to select prescription or drag & drop</p>
         <p style="font-size: 12px; color: var(--text-muted);">Supports PNG, JPG, JPEG, PDF up to 10MB</p>
         <input type="file" id="rx-file-input" accept="image/*,application/pdf" style="display: none;" />
       </div>
@@ -467,14 +499,14 @@ export function openPrescriptionUploadModal(onUploadSuccess) {
         <span style="font-size: 20px;">📄</span>
         <div style="flex: 1; overflow: hidden;">
           <p id="rx-filename" style="font-weight: 700; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"></p>
-          <span style="font-size: 11px; color: var(--success-color); font-weight: 600;">✓ Ready for pharmacist review</span>
+          <span style="font-size: 11px; color: var(--success-color); font-weight: 600;">✓ Ready for Registered Pharmacist review</span>
         </div>
       </div>
     </div>
   `;
 
   openModal({
-    title: 'Upload Doctor Prescription',
+    title: 'Upload Doctor Prescription (RMP)',
     bodyHtml,
     footerButtons: [
       {
@@ -492,7 +524,7 @@ export function openPrescriptionUploadModal(onUploadSuccess) {
             showToast('Please select a prescription file first', 'warning');
             return false;
           }
-          showToast(`Prescription "${file.name}" uploaded successfully! Pharmacist is reviewing.`, 'success');
+          showToast(`Prescription "${file.name}" received! Our pharmacist will review it within 10 minutes.`, 'success');
           if (onUploadSuccess) onUploadSuccess(file);
         }
       }

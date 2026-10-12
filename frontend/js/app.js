@@ -329,8 +329,8 @@ function setupProductCardInteractions() {
         }, 1200);
 
         // Toast feedback
-        if (product.prescriptionRequired) {
-          showToast(`Added "${product.name}" to cart. Note: Rx prescription required at checkout.`, 'warning', 4000);
+        if (product.isScheduleH1 || product.isScheduleH || product.prescriptionRequired) {
+          showToast(`Added "${product.name}" to cart. Note: Schedule H/H1 Doctor's prescription (RMP) required at checkout.`, 'warning', 4500);
         } else {
           showToast(`Added "${product.name}" to cart!`, 'success');
         }

@@ -15,20 +15,22 @@ The goal of this document is to capture the "wins," the mistakes, and the lesson
 *   **Wins:** Established complete medical color tokens (teal, clinical sky, amber Rx alerts), spacing system, responsive elevation shadows, and CSS reset.
 
 ### Phase 2: Frontend Implementation
-*   **Mistake:** Product cards rendered with hardcoded fields could break if mock data differed from the backend entity definition.
-*   **Lesson:** Strictly align frontend rendering with `docs/API_CONTRACT.md` schema (`id`, `name`, `brand`, `price`, `category`, `prescriptionRequired`, `imageUrl`), using resilient fallback placeholders for images.
-*   **Wins:** Implemented full semantic homepage with hero section, trust indicators, interactive prescription upload dropzone, filter pill controls, quick view modal, toast feedback notifications, and responsive navigation drawer.
-
-### Phase 3: Logic & Integration
-*   **Mistake:** Direct coupling between UI components and cart mutations could create synchronization bugs across pages.
-*   **Lesson:** Used decoupled event dispatching (`window.dispatchEvent('cart:updated')`) so the navbar cart badge automatically synchronizes whenever any component adds an item.
-*   **Wins:** Successfully connected mock async API client (`fetchMedicines`, `fetchCategories`) with simulated network latency to mimic production REST behavior. 
+*   **Mistake:** 
+    1. Navigation links had abrupt color shifts without smooth animated transitions or hover feedback.
+    2. Medicine card images using `object-fit: cover` cropped out essential product labels, dosages, and pack edges.
+    3. Product catalog was modeled with generic USD pricing rather than the target Indian market.
+*   **Lesson:** 
+    1. Micro-animations (e.g. `transform: translateX(-50%)` expanding underline, logo rotation, cart bounce) dramatically increase perceived quality.
+    2. Healthcare e-commerce product cards require `object-fit: contain` with fixed height and padding so entire strips, blisters, and bottles remain visible without clipping.
+    3. Localization requires deep contextual alignment: INR (`₹`) formatting with `en-IN`, Schedule H/H1 prescription compliance (Drugs & Cosmetics Act), authentic Indian brands (Dolo 650, Crocin, Augmentin, Becosules), UPI/COD payment options, and 25,000+ PIN code coverage.
+*   **Wins:** Implemented full semantic Indian healthcare homepage with crisp embedded SVG packaging artwork, Schedule H/H1 red regulatory badges, smooth navbar hover micro-interactions, prescription upload modal, and responsive design.
 
 ---
 
 ## Technical Learnings
-- *Example: Learned how to use `localStorage` to persist a cart across page refreshes.*
-- *Example: Found a better way to structure CSS using BEM (Block Element Modifier) methodology.*
+- *Navbar Micro-interactions: Used CSS pseudo-elements `::after` with cubic-bezier easing to produce expanding underline animations that gracefully highlight active and hovered navigation links.*
+- *Medical Card Image Rendering: Replaced cropped image ratios with a dedicated 210px flex container, `object-fit: contain`, and drop-shadows, ensuring clear visibility of medicine labels and packaging.*
+- *Indian Regulatory Integration: Integrated Schedule H & Schedule H1 prescription rules under the Indian Drugs & Cosmetics Act, including red ribbon alerts and Registered Medical Practitioner (RMP) verification requirements.*
 
 ---
 
