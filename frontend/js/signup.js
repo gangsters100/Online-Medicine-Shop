@@ -314,6 +314,7 @@ function launchBallToSlot(digit) {
   const slotRect = slotElement.getBoundingClientRect();
   const canvasRect = DOM.canvasSignup.getBoundingClientRect();
 
+  // Convert slot position (which is on page) to canvas-relative coordinates
   const targetX = slotRect.left - canvasRect.left + slotRect.width / 2;
   const targetY = slotRect.top - canvasRect.top + slotRect.height / 2;
 

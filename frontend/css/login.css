@@ -504,7 +504,7 @@
 
 /* Left: Slingshot Canvas + Game Controls */
 .slingshot-canvas {
-  flex: 0 0 55%;
+  width: 100% !important;
   height: 350px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
