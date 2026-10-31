@@ -499,7 +499,7 @@
   background: linear-gradient(135deg, rgba(13, 148, 136, 0.03) 0%, rgba(2, 132, 199, 0.03) 100%);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
-  align-items: flex-start;
+  align-items: center;
 }
 
 /* Left: Slingshot Canvas + Game Controls */
@@ -521,6 +521,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  justify-content: flex-start;
 }
 
 .slingshot-left-section .slingshot-canvas {
@@ -534,6 +535,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  justify-content: center;
 }
 
 /* Divider: Big OR */
@@ -542,8 +544,8 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  margin: auto 0;
-  min-height: 200px;
+  min-height: 400px;
+  justify-content: center;
 }
 
 .divider-line {
@@ -554,11 +556,14 @@
 
 .divider-text {
   flex: 0 0 auto;
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: 800;
   color: var(--text-main);
   background: var(--bg-surface);
-  padding: 0 var(--spacing-md);
+  padding: var(--spacing-md);
+  white-space: nowrap;
+  min-width: 60px;
+  text-align: center;
 }
 
 /* OTP Slots Display */
@@ -821,6 +826,7 @@
     flex-direction: column;
     padding: var(--spacing-md);
     gap: var(--spacing-md);
+    align-items: stretch;
   }
 
   .slingshot-canvas {
@@ -838,7 +844,7 @@
     flex-direction: row;
     min-height: auto;
     margin: var(--spacing-lg) 0;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
   }
 
   .divider-line {
@@ -846,7 +852,7 @@
   }
 
   .divider-text {
-    padding: 0 var(--spacing-sm);
+    padding: var(--spacing-sm);
     font-size: var(--font-size-lg);
   }
 }
