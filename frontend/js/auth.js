@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
   authState.slingshot.ballX = CANVAS_WIDTH / 2;
   authState.slingshot.ballY = CANVAS_HEIGHT - 60;
 
-  initializeDigitButtons();
   attachEventListeners();
   drawSlingshot();
 });
@@ -166,6 +165,7 @@ function generateAndSendOTP(phone) {
 
   DOM.otpPhoneDisplay.textContent = `Sent to +91 ${phone.slice(0, 4)}${'*'.repeat(6)}`;
   transitionToStep('otp');
+  initializeDigitButtons();
   updateOtpDisplay();
   startResendTimer();
 }
@@ -294,13 +294,6 @@ function drawSlingshot() {
     ctx.stroke();
     ctx.setLineDash([]);
   }
-
-  // Draw target slot preview hint
-  ctx.strokeStyle = 'rgba(13, 148, 136, 0.25)';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([6, 6]);
-  ctx.strokeRect(width / 2 - 120, 15, 240, 45);
-  ctx.setLineDash([]);
 
   // Draw slingshot projectile ball with loaded digit
   ctx.fillStyle = '#10b981';

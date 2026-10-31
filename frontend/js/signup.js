@@ -273,13 +273,6 @@ function drawSlingshot() {
     ctx.setLineDash([]);
   }
 
-  // Draw target slot preview hint
-  ctx.strokeStyle = 'rgba(13, 148, 136, 0.25)';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([6, 6]);
-  ctx.strokeRect(width / 2 - 120, 15, 240, 45);
-  ctx.setLineDash([]);
-
   // Draw slingshot projectile ball with loaded digit
   ctx.fillStyle = '#10b981';
   ctx.strokeStyle = '#047857';
