@@ -157,11 +157,10 @@
 
         <!-- Slingshot Game Container (Horizontal Layout) -->
         <div class="slingshot-container">
-          <!-- LEFT: Slingshot Canvas -->
-          <canvas id="slingshot-canvas" class="slingshot-canvas" width="400" height="300"></canvas>
+          <!-- LEFT: Slingshot Canvas + Game Controls -->
+          <div class="slingshot-left-section">
+            <canvas id="slingshot-canvas" class="slingshot-canvas" width="400" height="300"></canvas>
 
-          <!-- RIGHT: OTP Input Section -->
-          <div class="otp-input-section">
             <!-- OTP Slots Display -->
             <div class="otp-slots-wrapper">
               <div class="otp-slots" id="otp-slots">
@@ -196,7 +195,10 @@
               <button type="button" class="btn btn-outline btn-sm" id="clear-otp-btn" aria-label="Clear OTP">Clear</button>
               <button type="button" class="btn btn-primary btn-sm" id="verify-otp-btn" aria-label="Verify OTP">Verify</button>
             </div>
+          </div>
 
+          <!-- RIGHT: Direct OTP Input Section -->
+          <div class="otp-input-section">
             <!-- Accessibility Fallback (Direct Typing) -->
             <div class="fallback-input">
               <label for="direct-otp-input">Or enter OTP directly:</label>

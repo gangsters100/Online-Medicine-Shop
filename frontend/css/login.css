@@ -92,7 +92,7 @@
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 520px;
+  max-width: 900px;
   margin: auto;
   padding: var(--spacing-md);
   display: flex;
@@ -132,6 +132,7 @@
   position: relative;
   overflow: visible;
   animation: cardSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
 }
 
 @keyframes cardSlideUp {
@@ -492,21 +493,18 @@
    SLINGSHOT OTP GAME (Step 3) - HORIZONTAL LAYOUT
    ========================================================================== */
 .slingshot-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: var(--spacing-xl);
-  row-gap: var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-xl);
   padding: var(--spacing-lg);
   background: linear-gradient(135deg, rgba(13, 148, 136, 0.03) 0%, rgba(2, 132, 199, 0.03) 100%);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
+  align-items: flex-start;
 }
 
-/* Left: Slingshot Canvas - Grid Column 1 */
+/* Left: Slingshot Canvas + Game Controls */
 .slingshot-canvas {
-  grid-column: 1;
-  grid-row: 1 / 999;
-  width: 100%;
+  flex: 0 0 55%;
   height: 350px;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -514,12 +512,25 @@
   cursor: crosshair;
   touch-action: none;
   display: block;
+  box-sizing: border-box;
 }
 
-/* Right: OTP Input Section - Grid Column 2 */
+/* Left Column Container (Canvas + Controls) */
+.slingshot-left-section {
+  flex: 0 0 55%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.slingshot-left-section .slingshot-canvas {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* Right: Direct OTP Input Section */
 .otp-input-section {
-  grid-column: 2;
-  grid-row: 1;
+  flex: 0 0 45%;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -777,21 +788,33 @@
    RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 @media (max-width: 1024px) {
+  .login-container {
+    max-width: 600px;
+  }
+
   .slingshot-container {
     flex-direction: column;
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
   }
 
   .slingshot-canvas {
+    flex: 1 1 auto;
     width: 100%;
     height: 300px;
   }
 
   .otp-input-section {
+    flex: 1 1 auto;
     width: 100%;
   }
 }
 
 @media (max-width: 768px) {
+  .login-container {
+    max-width: 520px;
+  }
+
   .login-card {
     padding: var(--spacing-xl);
   }
@@ -811,8 +834,14 @@
   }
 
   .slingshot-canvas {
+    flex: 1 1 auto;
     width: 100%;
     height: 250px;
+  }
+
+  .otp-input-section {
+    flex: 1 1 auto;
+    width: 100%;
   }
 
   .otp-slots {
@@ -843,6 +872,7 @@
 @media (max-width: 480px) {
   .login-container {
     padding: var(--spacing-sm);
+    max-width: 100%;
   }
 
   .login-card {
@@ -863,14 +893,20 @@
   }
 
   .slingshot-container {
+    flex-direction: column;
     padding: var(--spacing-md);
     gap: var(--spacing-md);
-    flex-direction: column;
   }
 
   .slingshot-canvas {
+    flex: 1 1 auto;
     width: 100%;
     height: 200px;
+  }
+
+  .otp-input-section {
+    flex: 1 1 auto;
+    width: 100%;
   }
 
   .otp-slot {
