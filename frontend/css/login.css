@@ -494,12 +494,12 @@
    ========================================================================== */
 .slingshot-container {
   display: flex;
-  gap: var(--spacing-xl);
+  gap: 0;
   padding: var(--spacing-lg);
   background: linear-gradient(135deg, rgba(13, 148, 136, 0.03) 0%, rgba(2, 132, 199, 0.03) 100%);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
-  align-items: center;
+  align-items: stretch;
 }
 
 /* Left: Slingshot Canvas + Game Controls */
@@ -517,11 +517,13 @@
 
 /* Left Column Container (Canvas + Controls) */
 .slingshot-left-section {
-  flex: 0 0 55%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
   justify-content: flex-start;
+  padding-right: var(--spacing-xl);
+  border-right: 2px solid var(--border-color);
 }
 
 .slingshot-left-section .slingshot-canvas {
@@ -531,39 +533,17 @@
 
 /* Right: Direct OTP Input Section */
 .otp-input-section {
-  flex: 0 0 45%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: var(--spacing-xl);
 }
 
-/* Divider: Big OR */
+/* Divider: Big OR - Hide on desktop */
 .otp-divider {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  min-height: 400px;
-  justify-content: center;
-}
-
-.divider-line {
-  flex: 1;
-  height: 2px;
-  background: var(--border-color);
-}
-
-.divider-text {
-  flex: 0 0 auto;
-  font-size: var(--font-size-2xl);
-  font-weight: 800;
-  color: var(--text-main);
-  background: var(--bg-surface);
-  padding: var(--spacing-md);
-  white-space: nowrap;
-  min-width: 60px;
-  text-align: center;
+  display: none;
 }
 
 /* OTP Slots Display */
@@ -835,12 +815,22 @@
     height: 300px;
   }
 
+  .slingshot-left-section {
+    border-right: none;
+    padding-right: 0;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+  }
+
   .otp-input-section {
     flex: 1 1 auto;
     width: 100%;
+    padding-left: 0;
+    padding-top: var(--spacing-lg);
   }
 
   .otp-divider {
+    display: flex;
     flex-direction: row;
     min-height: auto;
     margin: var(--spacing-lg) 0;
