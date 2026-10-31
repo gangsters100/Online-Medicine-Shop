@@ -1,0 +1,890 @@
+/**
+ * login.css: Authentication Module Styling
+ * Slingshot OTP Game UI with Medical Theme
+ * Member 4: Muhammad Abrar Aamir Sheikh
+ */
+
+/* ==========================================================================
+   LOGIN PAGE LAYOUT & BACKGROUND
+   ========================================================================== */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: auto;
+  background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 50%, #fef3c7 100%);
+  position: relative;
+  overflow-y: auto;
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+.login-bg-decoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.06;
+}
+
+.blob-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--primary-color);
+  top: -100px;
+  right: -100px;
+  animation: floatBlob 20s infinite ease-in-out;
+}
+
+.blob-2 {
+  width: 300px;
+  height: 300px;
+  background: var(--secondary-color);
+  bottom: -50px;
+  left: -50px;
+  animation: floatBlob 25s infinite ease-in-out reverse;
+}
+
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(13, 148, 136, 0.1);
+}
+
+.circle-1 {
+  width: 500px;
+  height: 500px;
+  top: 20%;
+  right: 10%;
+  animation: rotateCircle 30s infinite linear;
+}
+
+.circle-2 {
+  width: 300px;
+  height: 300px;
+  bottom: 15%;
+  left: 5%;
+  animation: rotateCircle 40s infinite linear reverse;
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+@keyframes rotateCircle {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   LOGIN CONTAINER & CARD
+   ========================================================================== */
+.login-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.login-header {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(13, 148, 136, 0.1);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  background: rgba(13, 148, 136, 0.2);
+  transform: translateX(-4px);
+}
+
+.login-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+  padding: var(--spacing-2xl);
+  position: relative;
+  overflow: visible;
+  animation: cardSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   LOGIN BRAND HEADER
+   ========================================================================== */
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.login-brand h1 {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.login-brand span {
+  color: var(--primary-color);
+}
+
+/* ==========================================================================
+   LOGIN STEPS (Multi-Step Form)
+   ========================================================================== */
+.login-step {
+  display: none;
+  animation: stepFadeIn 0.3s ease-out;
+}
+
+.login-step.active {
+  display: block;
+}
+
+@keyframes stepFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.step-header h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: var(--spacing-sm);
+}
+
+.step-header p {
+  font-size: var(--font-size-base);
+  color: var(--text-light);
+}
+
+/* ==========================================================================
+   PHONE INPUT FORM (Step 1)
+   ========================================================================== */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: var(--spacing-sm);
+}
+
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  padding: 0 12px;
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.phone-input-wrapper:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+  background: var(--bg-muted);
+}
+
+.country-code {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: var(--font-size-md);
+  padding: 12px 0;
+  padding-right: 8px;
+  border-right: 1px solid var(--border-subtle);
+}
+
+.phone-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 14px;
+  font-size: var(--font-size-md);
+  color: var(--text-main);
+  outline: none;
+}
+
+.phone-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  font-size: var(--font-size-md);
+  color: var(--text-main);
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+  background: var(--bg-muted);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.checkbox-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: var(--font-size-sm);
+  color: var(--text-main);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.checkbox-label a {
+  color: var(--primary-color);
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.checkbox-label a:hover {
+  color: var(--primary-hover);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ==========================================================================
+   PASSWORD INPUT FORM (Step 2)
+   ========================================================================== */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.password-input-wrapper .form-input {
+  flex: 1;
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-toggle-password:hover {
+  color: var(--primary-color);
+}
+
+.btn-toggle-password.active {
+  color: var(--primary-color);
+}
+
+.forgot-password-section {
+  text-align: center;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.forgot-password-link {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  font-size: var(--font-size-sm);
+}
+
+.forgot-password-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.back-to-phone-section {
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.back-link-btn {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  font-size: var(--font-size-sm);
+  padding: 6px 12px;
+}
+
+.back-link-btn:hover {
+  color: var(--primary-color);
+}
+
+/* ==========================================================================
+   SIGNUP PROMPT
+   ========================================================================== */
+.signup-prompt {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+  margin: var(--spacing-md) 0 var(--spacing-lg);
+}
+
+.signup-link {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.signup-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   LOGIN DIVIDER & SOCIAL LOGINS
+   ========================================================================== */
+.login-divider {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: var(--spacing-lg) 0;
+  position: relative;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.login-divider::before {
+  left: 0;
+}
+
+.login-divider::after {
+  right: 0;
+}
+
+.social-logins {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.btn-social {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-muted);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-social:hover {
+  border-color: var(--primary-color);
+  background: var(--primary-subtle);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+}
+
+/* ==========================================================================
+   SLINGSHOT OTP GAME (Step 3) - HORIZONTAL LAYOUT
+   ========================================================================== */
+.slingshot-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--spacing-xl);
+  row-gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.03) 0%, rgba(2, 132, 199, 0.03) 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Left: Slingshot Canvas - Grid Column 1 */
+.slingshot-canvas {
+  grid-column: 1;
+  grid-row: 1 / 999;
+  width: 100%;
+  height: 350px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
+  cursor: crosshair;
+  touch-action: none;
+  display: block;
+}
+
+/* Right: OTP Input Section - Grid Column 2 */
+.otp-input-section {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* OTP Slots Display */
+.otp-slots-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.otp-slots {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.otp-slot {
+  width: 45px;
+  height: 45px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: var(--text-main);
+  transition: all var(--transition-normal);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.otp-slot.filled {
+  border-color: var(--primary-color);
+  background: var(--primary-light);
+  color: var(--primary-color);
+  animation: slotFill 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slotFill {
+  0% {
+    transform: scale(0.8) rotateX(-20deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1) rotateX(10deg);
+  }
+  100% {
+    transform: scale(1) rotateX(0);
+  }
+}
+
+/* Digit Buttons Grid */
+.digit-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-xs);
+}
+
+.digit-btn {
+  aspect-ratio: 1;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-muted);
+  color: var(--text-main);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.digit-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--primary-light);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+}
+
+.digit-btn:active {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 4px rgba(13, 148, 136, 0.1);
+}
+
+.digit-btn.entered {
+  background: var(--primary-color);
+  color: var(--text-inverted);
+  border-color: var(--primary-color);
+  animation: buttonPress 0.3s ease;
+}
+
+@keyframes buttonPress {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* Game Controls */
+.game-controls {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.game-controls .btn {
+  flex: 1;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY FALLBACK (Direct OTP Input)
+   ========================================================================== */
+.fallback-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.fallback-input label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.direct-otp {
+  padding: 10px 14px;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  letter-spacing: 8px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: all var(--transition-fast);
+  font-family: monospace;
+}
+
+.direct-otp:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: var(--primary-subtle);
+  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+}
+
+/* ==========================================================================
+   RESEND OTP SECTION
+   ========================================================================== */
+.resend-section {
+  text-align: center;
+  padding-top: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+}
+
+.resend-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+  padding: 0;
+  font-size: inherit;
+}
+
+.resend-btn:hover {
+  color: var(--primary-hover);
+}
+
+.resend-btn:disabled {
+  color: var(--text-muted);
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
+#resend-timer {
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* ==========================================================================
+   SUCCESS SCREEN (Step 3)
+   ========================================================================== */
+.success-content {
+  text-align: center;
+  padding: var(--spacing-2xl) 0;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--text-inverted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: successBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+}
+
+@keyframes successBounce {
+  0% {
+    transform: scale(0) rotateZ(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateZ(10deg);
+  }
+  100% {
+    transform: scale(1) rotateZ(0);
+  }
+}
+
+.success-content h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: var(--spacing-sm);
+}
+
+.success-content p {
+  font-size: var(--font-size-base);
+  color: var(--text-light);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ==========================================================================
+   LOGIN FOOTER
+   ========================================================================== */
+.login-footer {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.login-footer a {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color var(--transition-fast);
+}
+
+.login-footer a:hover {
+  color: var(--primary-hover);
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .slingshot-container {
+    flex-direction: column;
+  }
+
+  .slingshot-canvas {
+    width: 100%;
+    height: 300px;
+  }
+
+  .otp-input-section {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: var(--spacing-xl);
+  }
+
+  .login-brand h1 {
+    font-size: var(--font-size-lg);
+  }
+
+  .step-header h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .slingshot-container {
+    flex-direction: column;
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+
+  .slingshot-canvas {
+    width: 100%;
+    height: 250px;
+  }
+
+  .otp-slots {
+    gap: var(--spacing-sm);
+  }
+
+  .otp-slot {
+    width: 42px;
+    height: 42px;
+    font-size: var(--font-size-lg);
+  }
+
+  .digit-buttons {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--spacing-xs);
+  }
+
+  .social-logins {
+    gap: var(--spacing-sm);
+  }
+
+  .btn-social {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: var(--spacing-sm);
+  }
+
+  .login-card {
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .login-brand {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .login-brand h1 {
+    font-size: var(--font-size-md);
+  }
+
+  .step-header h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .slingshot-container {
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+    flex-direction: column;
+  }
+
+  .slingshot-canvas {
+    width: 100%;
+    height: 200px;
+  }
+
+  .otp-slot {
+    width: 38px;
+    height: 38px;
+    font-size: var(--font-size-base);
+  }
+
+  .digit-buttons {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+  }
+
+  .fallback-input {
+    padding: var(--spacing-md) 0;
+  }
+}
