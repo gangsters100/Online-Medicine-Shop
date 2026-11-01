@@ -41,6 +41,9 @@ const state = {
  * Initialize Homepage
  */
 async function initHomepage() {
+  // Remove active state from nav links on homepage
+  cleanupNavActiveState();
+
   // Sync initial cart badge
   updateCartBadge(cart.getCount());
 
@@ -384,6 +387,17 @@ function setupMobileNav() {
       });
     });
   }
+}
+
+/**
+ * Remove active state from nav links on homepage
+ * Nav links should only be highlighted when navigating between different pages
+ */
+function cleanupNavActiveState() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+  });
 }
 
 // Start application when DOM is ready

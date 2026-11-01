@@ -60,20 +60,22 @@
       <!-- Main Navigation with Smooth Animated Hover Underlines -->
       <nav class="main-nav" aria-label="Main Navigation">
         <ul class="nav-links" id="main-nav-links">
-          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="index.html" class="nav-link ">Home</a></li>
           <li><a href="#categories-section" class="nav-link">Categories</a></li>
           <li><a href="#medicines-section" class="nav-link">Medicines</a></li>
           <li><a href="#testimonials-section" class="nav-link">Reviews</a></li>
           <li><a href="#faq-section" class="nav-link">FAQs</a></li>
-          <li><a href="pages/login.html" class="nav-link" title="Slingshot Login - Interactive OTP Verification">
-            <span style="font-size: 16px; margin-right: 4px;">🎮</span>Slingshot Login
-          </a></li>
         </ul>
       </nav>
 
       <!-- Header Action Controls -->
       <div class="header-actions">
-        <button type="button" class="btn btn-outline-primary btn-sm btn-pill" data-action="upload-prescription" title="Upload Doctor's Prescription (RMP)">
+        <a href="pages/login.html" class="btn btn-primary btn-sm btn-pill" title="Login to your account" aria-label="Login">
+          <span style="font-size: 14px; margin-right: 4px;">👤</span>
+          <span>Login/Signup</span>
+        </a>
+
+        <button type="button" class="btn btn-primary btn-sm btn-pill" data-action="upload-prescription" title="Upload Doctor's Prescription (RMP)">
           <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="17 8 12 3 7 8"/>
