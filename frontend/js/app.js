@@ -55,6 +55,9 @@ async function initHomepage() {
   // Setup mobile navigation toggle
   setupMobileNav();
 
+  // Setup cart button to go to checkout
+  setupCartButton();
+
   // Setup Prescription upload modal triggers
   setupPrescriptionTriggers();
 
@@ -353,6 +356,18 @@ function setupProductCardInteractions() {
       }
     }
   });
+}
+
+/**
+ * Cart button click handler - navigate to checkout
+ */
+function setupCartButton() {
+  const cartBtn = document.getElementById('btn-cart');
+  if (cartBtn) {
+    cartBtn.addEventListener('click', () => {
+      window.location.href = 'pages/checkout.html';
+    });
+  }
 }
 
 /**

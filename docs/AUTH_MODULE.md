@@ -226,7 +226,7 @@ if (pullDistance > 15) {  // Minimum pull to launch
 sessionStorage.setItem('authToken', `token_${Date.now()}`);
 sessionStorage.setItem('userPhone', '9876543210');
 sessionStorage.setItem('userEmail', 'user@example.com');
-sessionStorage.setItem('userName', 'John Doe');
+sessionStorage.setItem('userName', 'Ashish Sharma');
 ```
 
 ---
@@ -275,8 +275,8 @@ Response: { success: true, token: 'auth_token_xyz' }
 ```javascript
 POST /api/auth/signup
 {
-  fullName: 'John Doe',
-  email: 'john@example.com',
+  fullName: 'Ashish Sharma',
+  email: 'ashish@example.com',
   phone: '9876543210',
   password: 'testpass123'
 }

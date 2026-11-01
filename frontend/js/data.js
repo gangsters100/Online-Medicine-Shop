@@ -713,7 +713,7 @@ export const mockTestimonials = [
     role: "MBBS, MD (General Physician, Pune)",
     comment: "As a practicing physician, I frequently recommend MediCare Plus to my patients. Their strict adherence to Schedule H prescription verification and cold-chain medicine storage is commendable.",
     rating: 5,
-    avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=150&q=80"
+    avatar: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150"><circle cx="75" cy="75" r="75" fill="%230d9488"/><circle cx="75" cy="50" r="30" fill="%23ffffff"/><path d="M30 120 Q30 90 75 90 Q120 90 120 120 L120 150 L30 150 Z" fill="%23ffffff"/></svg>`
   },
   {
     id: 2,
@@ -721,7 +721,7 @@ export const mockTestimonials = [
     role: "Verified Patient, Bengaluru",
     comment: "Ordered Dolo 650 and Becosules at 11 PM and it arrived in 40 minutes! Ordering monthly chronic medicines for my parents with UPI payment has been completely seamless.",
     rating: 5,
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80"
+    avatar: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150"><circle cx="75" cy="75" r="75" fill="%2310b981"/><circle cx="75" cy="50" r="30" fill="%23ffffff"/><path d="M30 120 Q30 90 75 90 Q120 90 120 120 L120 150 L30 150 Z" fill="%23ffffff"/></svg>`
   },
   {
     id: 3,
@@ -729,7 +729,7 @@ export const mockTestimonials = [
     role: "Regular Customer, Ahmedabad",
     comment: "The prescription upload feature is very straightforward. Pharmacist verified my father's Telma and Glycomet within 10 minutes and offered genuine discounts over local chemist prices.",
     rating: 5,
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+    avatar: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150"><circle cx="75" cy="75" r="75" fill="%230284c7"/><circle cx="75" cy="50" r="30" fill="%23ffffff"/><path d="M30 120 Q30 90 75 90 Q120 90 120 120 L120 150 L30 150 Z" fill="%23ffffff"/></svg>`
   }
 ];
 
