@@ -605,22 +605,29 @@ function transitionToStep(stepName) {
   if (DOM.otpStep) DOM.otpStep.classList.remove('active');
   if (DOM.successStep) DOM.successStep.classList.remove('active');
 
-  // Show selected step
+  // Get login container for width adjustment
+  const loginContainer = document.querySelector('.login-container');
+
+  // Show selected step and adjust container width
   switch (stepName) {
     case 'phone':
       if (DOM.phoneStep) DOM.phoneStep.classList.add('active');
+      if (loginContainer) loginContainer.style.maxWidth = '500px';
       DOM.phoneInput.focus();
       break;
     case 'password':
       if (DOM.passwordStep) DOM.passwordStep.classList.add('active');
+      if (loginContainer) loginContainer.style.maxWidth = '500px';
       DOM.passwordInput.focus();
       break;
     case 'otp':
       if (DOM.otpStep) DOM.otpStep.classList.add('active');
+      if (loginContainer) loginContainer.style.maxWidth = '900px';
       setTimeout(() => drawSlingshot(), 100);
       break;
     case 'success':
       if (DOM.successStep) DOM.successStep.classList.add('active');
+      if (loginContainer) loginContainer.style.maxWidth = '500px';
       break;
   }
 }

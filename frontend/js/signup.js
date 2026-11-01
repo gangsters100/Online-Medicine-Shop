@@ -545,17 +545,23 @@ function transitionToStep(stepName) {
   DOM.otpStep.classList.remove('active');
   DOM.successStep.classList.remove('active');
 
+  // Get login container for width adjustment
+  const loginContainer = document.querySelector('.login-container');
+
   switch (stepName) {
     case 'info':
       DOM.infoStep.classList.add('active');
+      if (loginContainer) loginContainer.style.maxWidth = '500px';
       DOM.fullNameInput.focus();
       break;
     case 'otp':
       DOM.otpStep.classList.add('active');
+      if (loginContainer) loginContainer.style.maxWidth = '900px';
       setTimeout(() => drawSlingshot(), 100);
       break;
     case 'success':
       DOM.successStep.classList.add('active');
+      if (loginContainer) loginContainer.style.maxWidth = '500px';
       break;
   }
 }
