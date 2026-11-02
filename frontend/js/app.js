@@ -38,6 +38,38 @@ const state = {
 };
 
 /**
+ * Check if user is logged in and update header login/profile button
+ */
+function checkAuthState() {
+  const userData = JSON.parse(sessionStorage.getItem('userData'));
+  const loginBtn = document.querySelector('a[href="pages/login.html"]');
+  if (!loginBtn) return;
+
+  if (userData && userData.name) {
+    loginBtn.href = 'pages/profile.html';
+    loginBtn.title = 'View your profile and orders';
+    loginBtn.innerHTML = `
+      <span style="font-size: 14px; margin-right: 4px;">👤</span>
+      <span>${userData.name.split(' ')[0]}</span>
+    `;
+  } else {
+    loginBtn.href = '#';
+    loginBtn.title = 'Please login or sign up';
+    loginBtn.innerHTML = `
+      <span style="font-size: 14px; margin-right: 4px;">👤</span>
+      <span>Profile</span>
+    `;
+    loginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast('Please login or sign up to view your profile', 'warning');
+      setTimeout(() => {
+        window.location.href = 'pages/login.html';
+      }, 1200);
+    });
+  }
+}
+
+/**
  * Initialize Homepage
  */
 async function initHomepage() {
@@ -57,6 +89,9 @@ async function initHomepage() {
 
   // Setup cart button to go to checkout
   setupCartButton();
+
+  // Check auth state for header button
+  checkAuthState();
 
   // Setup Prescription upload modal triggers
   setupPrescriptionTriggers();
