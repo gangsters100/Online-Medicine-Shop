@@ -6,12 +6,16 @@
 import { showToast } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Load user data from sessionStorage
-  const userData = JSON.parse(sessionStorage.getItem('userData')) || {
-    name: 'Ashish Sharma',
-    phone: '9876543210',
-    email: 'ashish.sharma@example.com'
-  };
+  // Load user data from sessionStorage with robust fallbacks
+  let userData = JSON.parse(sessionStorage.getItem('userData'));
+  if (!userData || !userData.name) {
+    userData = {
+      name: sessionStorage.getItem('userName') || 'Ashish Sharma',
+      phone: sessionStorage.getItem('userPhone') || '9876543210',
+      email: sessionStorage.getItem('userEmail') || 'ashish.sharma@example.com'
+    };
+    sessionStorage.setItem('userData', JSON.stringify(userData));
+  }
 
   const savedAddress = JSON.parse(sessionStorage.getItem('savedAddress')) || {
     fullName: userData.name || 'Ashish Sharma',

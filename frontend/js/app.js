@@ -41,7 +41,19 @@ const state = {
  * Check if user is logged in and update header login/profile button
  */
 function checkAuthState() {
-  const userData = JSON.parse(sessionStorage.getItem('userData'));
+  let userData = JSON.parse(sessionStorage.getItem('userData'));
+  const authToken = sessionStorage.getItem('authToken');
+  const userName = sessionStorage.getItem('userName');
+
+  if (!userData && (authToken || userName)) {
+    userData = {
+      name: userName || 'Ashish Sharma',
+      phone: sessionStorage.getItem('userPhone') || '9876543210',
+      email: sessionStorage.getItem('userEmail') || 'ashish.sharma@example.com'
+    };
+    sessionStorage.setItem('userData', JSON.stringify(userData));
+  }
+
   const loginBtn = document.querySelector('a[href="pages/login.html"]');
   if (!loginBtn) return;
 

@@ -507,6 +507,12 @@ function verifyOTP() {
     sessionStorage.setItem('userPhone', signupState.phone);
     sessionStorage.setItem('userEmail', signupState.email);
     sessionStorage.setItem('userName', signupState.fullName);
+    const userData = {
+      name: signupState.fullName,
+      phone: signupState.phone,
+      email: signupState.email
+    };
+    sessionStorage.setItem('userData', JSON.stringify(userData));
   } else {
     showToast('Incorrect OTP. Please try again.', 'error');
     signupState.userOtp = '';

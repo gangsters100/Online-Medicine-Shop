@@ -553,6 +553,18 @@ function verifyOTP() {
     showToast('Login successful! Redirecting...', 'success');
     sessionStorage.setItem('authToken', `token_${Date.now()}`);
     sessionStorage.setItem('userPhone', authState.phone);
+    if (!sessionStorage.getItem('userName')) {
+      sessionStorage.setItem('userName', 'Ashish Sharma');
+    }
+    if (!sessionStorage.getItem('userEmail')) {
+      sessionStorage.setItem('userEmail', 'ashish.sharma@example.com');
+    }
+    const userData = {
+      name: sessionStorage.getItem('userName'),
+      phone: authState.phone,
+      email: sessionStorage.getItem('userEmail')
+    };
+    sessionStorage.setItem('userData', JSON.stringify(userData));
 
     // Auto-redirect after 2 seconds
     setTimeout(() => {
