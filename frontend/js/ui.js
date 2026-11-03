@@ -5,13 +5,39 @@
  */
 
 /**
- * Format currency helper
- */
-/**
  * Format currency helper (Indian Rupee ₹)
  */
 export function formatCurrency(amount) {
   return `₹${Number(amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+/**
+ * Resolve image paths for subpages
+ * Converts ./images/... to ../images/... when on subpages like pages/checkout.html
+ */
+export function resolveImagePath(imagePath) {
+  if (!imagePath) return imagePath;
+
+  // If it's a data URL (SVG or fallback), return as-is
+  if (imagePath.startsWith('data:')) {
+    return imagePath;
+  }
+
+  // If it's an absolute URL, return as-is
+  if (imagePath.startsWith('http')) {
+    return imagePath;
+  }
+
+  // Check if we're on a subpage (pages/ directory)
+  const currentPath = window.location.pathname;
+  const isSubpage = currentPath.includes('/pages/');
+
+  // If on subpage and path starts with ./images/, convert to ../images/
+  if (isSubpage && imagePath.startsWith('./images/')) {
+    return imagePath.replace('./images/', '../images/');
+  }
+
+  return imagePath;
 }
 
 /**
@@ -49,9 +75,10 @@ export function renderProducts(products, containerSelector = '#product-container
   container.innerHTML = products.map(product => {
     const isRx = Boolean(product.prescriptionRequired);
     const hasDiscount = product.originalPrice && product.originalPrice > product.price;
-    const discountPercent = hasDiscount 
-      ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+    const discountPercent = hasDiscount
+      ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
       : 0;
+    const imagePath = resolveImagePath(product.imageUrl || DEFAULT_PRODUCT_IMAGE_SVG);
 
     let badgeMarkup = '';
     if (product.isScheduleH1) {
@@ -74,7 +101,7 @@ export function renderProducts(products, containerSelector = '#product-container
       <article class="product-card" data-product-id="${product.id}">
         <div class="product-img-wrap">
           <img
-            src="${product.imageUrl || DEFAULT_PRODUCT_IMAGE_SVG}"
+            src="${imagePath}"
             alt="${escapeHtml(product.name)}"
             class="product-img"
             loading="lazy"
@@ -410,11 +437,12 @@ export function closeModal() {
  */
 export function openProductQuickView(product, onAddToCart) {
   const isRx = Boolean(product.prescriptionRequired || product.isScheduleH || product.isScheduleH1);
+  const imagePath = resolveImagePath(product.imageUrl || DEFAULT_PRODUCT_IMAGE_SVG);
   const bodyHtml = `
     <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; align-items: start;">
       <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); background: radial-gradient(circle at center, #ffffff 40%, #f8fafc 100%); padding: 18px; display: flex; align-items: center; justify-content: center; height: 250px;">
         <img
-          src="${product.imageUrl || DEFAULT_PRODUCT_IMAGE_SVG}"
+          src="${imagePath}"
           alt="${escapeHtml(product.name)}"
           style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));"
           onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22225%22 viewBox=%220 0 300 225%22 fill=%22%23f8fafc%22><rect width=%22300%22 height=%22225%22 fill=%22%23f8fafc%22/><rect x=%2285%22 y=%2245%22 width=%22130%22 height=%22135%22 rx=%2210%22 fill=%22%23ffffff%22 stroke=%22%230d9488%22 stroke-width=%222%22/><path d=%22M150 85v40M130 105h40%22 stroke=%22%230d9488%22 stroke-width=%225%22 stroke-linecap=%22round%22/><circle cx=%22150%22 cy=%22105%22 r=%2232%22 stroke=%22%230d9488%22 stroke-width=%222%22 fill=%22none%22/><text x=%22150%22 y=%22160%22 font-family=%22sans-serif%22 font-size=%2212%22 fill=%22%2364748b%22 text-anchor=%22middle%22 font-weight=%22700%22>MEDICINE PACK</text></svg>';"

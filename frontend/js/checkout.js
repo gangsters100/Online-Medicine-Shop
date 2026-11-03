@@ -9,6 +9,39 @@ import { mockMedicines } from './data.js';
 import { showToast } from './ui.js';
 
 // ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Resolve image paths for subpages
+ * Converts ./images/... to ../images/... when on subpages like pages/checkout.html
+ */
+function resolveImagePath(imagePath) {
+  if (!imagePath) return imagePath;
+
+  // If it's a data URL (SVG or fallback), return as-is
+  if (imagePath.startsWith('data:')) {
+    return imagePath;
+  }
+
+  // If it's an absolute URL, return as-is
+  if (imagePath.startsWith('http')) {
+    return imagePath;
+  }
+
+  // Check if we're on a subpage (pages/ directory)
+  const currentPath = window.location.pathname;
+  const isSubpage = currentPath.includes('/pages/');
+
+  // If on subpage and path starts with ./images/, convert to ../images/
+  if (isSubpage && imagePath.startsWith('./images/')) {
+    return imagePath.replace('./images/', '../images/');
+  }
+
+  return imagePath;
+}
+
+// ============================================================================
 // STATE MANAGEMENT: Central checkout state object
 // ============================================================================
 
@@ -337,11 +370,12 @@ function renderCartItems() {
     if (!medicine) return '';
 
     const itemTotal = medicine.price * (item.quantity || 1);
+    const imagePath = resolveImagePath(medicine.imageUrl);
 
     return `
       <div class="cart-item" data-item-index="${index}">
         <div class="item-image">
-          <img src="${medicine.imageUrl}" alt="${medicine.name}" />
+          <img src="${imagePath}" alt="${medicine.name}" />
         </div>
         <div class="item-details">
           <h4>${medicine.name}</h4>
