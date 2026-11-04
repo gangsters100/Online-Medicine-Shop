@@ -76,7 +76,7 @@ function checkAuthState() {
       showToast('Please login or sign up to view your profile', 'warning');
       setTimeout(() => {
         window.location.href = 'pages/login.html';
-      }, 1200);
+      }, 5200);
     });
   }
 }

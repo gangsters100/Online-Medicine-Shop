@@ -469,8 +469,8 @@
 }
 
 .btn-social {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: var(--radius-lg);
   border: 1.5px solid var(--border-color);
   background: var(--bg-muted);
@@ -483,10 +483,35 @@
 }
 
 .btn-social img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 85%;
+  max-height: 85%;
   display: block;
   object-fit: contain;
+  width: auto;
+  height: auto;
+}
+
+/* Ensure Google logo displays prominently and larger than Apple */
+button[aria-label="Login with Google"] .btn-social img,
+button[aria-label="Signup with Google"] .btn-social img {
+  max-width: 100%;
+  max-height: 100%;
+  padding: 0;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure Apple logo is smaller to match Google proportions */
+button[aria-label="Login with Apple"] .btn-social img,
+button[aria-label="Signup with Apple"] .btn-social img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .btn-social:hover {
