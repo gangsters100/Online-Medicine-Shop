@@ -539,13 +539,11 @@ function initCheckout() {
 
       // Remove from cart module (localStorage) to sync with homepage
       if (removedItem) {
-        const cartItems = cart.getItems();
-        const cartIndex = cartItems.findIndex(item =>
+        const cartIndex = cart.items.findIndex(item =>
           item.id === removedItem.id && item.name === removedItem.name
         );
         if (cartIndex !== -1) {
-          cartItems.splice(cartIndex, 1);
-          cart.items = cartItems;
+          cart.items.splice(cartIndex, 1);
           cart.save();
         }
       }
