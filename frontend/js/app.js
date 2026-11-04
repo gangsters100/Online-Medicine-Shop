@@ -365,6 +365,17 @@ function setupProductCardInteractions() {
 
     if (addBtn) {
       e.stopPropagation();
+
+      // Check if user is logged in
+      const userData = JSON.parse(sessionStorage.getItem('userData'));
+      if (!userData || !userData.phone) {
+        showToast('Please login or signup first to add items to cart', 'warning');
+
+        // Show redirect dialog with countdown
+        showRedirectDialog('Login Required', 'Redirecting to login page...', './pages/login.html', 5500);
+        return;
+      }
+
       const productId = Number(addBtn.dataset.productId);
       const product = state.allMedicines.find(m => m.id === productId);
 
@@ -393,6 +404,16 @@ function setupProductCardInteractions() {
 
     // Card click triggers Quick View
     if (card) {
+      // Check if user is logged in before showing quick view
+      const userData = JSON.parse(sessionStorage.getItem('userData'));
+      if (!userData || !userData.phone) {
+        showToast('Please login or signup first to add items to cart', 'warning');
+
+        // Show redirect dialog with countdown
+        showRedirectDialog('Login Required', 'Redirecting to login page...', './pages/login.html', 5500);
+        return;
+      }
+
       const productId = Number(card.dataset.productId);
       const product = state.allMedicines.find(m => m.id === productId);
       if (product) {
@@ -403,6 +424,127 @@ function setupProductCardInteractions() {
       }
     }
   });
+}
+
+/**
+ * Show redirect dialog with countdown
+ */
+function showRedirectDialog(title, message, redirectUrl, delayMs) {
+  // Remove existing redirect dialog if any
+  const existing = document.getElementById('redirect-dialog-overlay');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'redirect-dialog-overlay';
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+  `;
+
+  const remaining = document.createElement('div');
+  remaining.id = 'redirect-countdown';
+  remaining.textContent = Math.ceil(delayMs / 1000);
+
+  const dialog = document.createElement('div');
+  dialog.style.cssText = `
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-out;
+  `;
+  dialog.innerHTML = `
+    <div style="margin-bottom: 24px;">
+      <svg viewBox="0 0 24 24" width="48" height="48" stroke="var(--primary-color)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto; display: block;">
+        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm.5-8H9v-2h3.5v5z"></path>
+      </svg>
+    </div>
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0 0 12px 0; color: var(--text-main);">${title}</h2>
+    <p style="font-size: 14px; color: var(--text-light); margin: 0 0 24px 0;">${message}</p>
+    <div style="display: flex; gap: 12px; align-items: center; justify-content: center; margin-bottom: 24px;">
+      <div style="
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        color: white;
+        min-width: 60px;
+      " id="redirect-countdown">5</div>
+      <span style="font-size: 14px; color: var(--text-light);">seconds</span>
+    </div>
+    <button type="button" style="
+      width: 100%;
+      padding: 12px 24px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    " id="redirect-now-btn">Go to Login Now</button>
+  `;
+
+  dialog.style.animation = 'slideUp 0.3s ease-out';
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  // Add animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Countdown timer
+  let remainingMs = delayMs;
+  const countdownInterval = setInterval(() => {
+    remainingMs -= 100;
+    const seconds = Math.ceil(remainingMs / 1000);
+    const countdownEl = document.getElementById('redirect-countdown');
+    if (countdownEl) {
+      countdownEl.textContent = Math.max(0, seconds);
+    }
+
+    if (remainingMs <= 0) {
+      clearInterval(countdownInterval);
+      window.location.href = redirectUrl;
+    }
+  }, 100);
+
+  // "Go Now" button click
+  const goNowBtn = dialog.querySelector('#redirect-now-btn');
+  if (goNowBtn) {
+    goNowBtn.addEventListener('click', () => {
+      clearInterval(countdownInterval);
+      window.location.href = redirectUrl;
+    });
+  }
 }
 
 /**
