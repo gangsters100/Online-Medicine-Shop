@@ -377,19 +377,21 @@ function renderCartItems() {
         <div class="item-image">
           <img src="${imagePath}" alt="${medicine.name}" />
         </div>
-        <div class="item-details">
-          <h4>${medicine.name}</h4>
-          <p class="item-brand">${medicine.brand}</p>
-          <p class="item-price">${formatCurrency(medicine.price)} per unit</p>
+        <div class="cart-item-info">
+          <h4 class="cart-item-name">${medicine.name}</h4>
+          <p class="cart-item-brand">${medicine.brand}</p>
+          <p style="font-size: 12px; color: var(--text-light);">${formatCurrency(medicine.price)} per unit</p>
         </div>
-        <div class="item-quantity">
-          <button type="button" class="qty-btn qty-minus" data-item-index="${index}" aria-label="Decrease quantity">−</button>
-          <input type="number" class="qty-input" value="${item.quantity || 1}" min="1" data-item-index="${index}" readonly />
-          <button type="button" class="qty-btn qty-plus" data-item-index="${index}" aria-label="Increase quantity">+</button>
-        </div>
-        <div class="item-total">
-          <p>${formatCurrency(itemTotal)}</p>
-          <button type="button" class="btn-remove-item" data-item-index="${index}" aria-label="Remove item">Remove</button>
+        <div class="cart-item-controls">
+          <div class="quantity-adjuster">
+            <button type="button" class="qty-btn qty-minus" data-item-index="${index}" aria-label="Decrease quantity">−</button>
+            <span class="qty-display">${item.quantity || 1}</span>
+            <button type="button" class="qty-btn qty-plus" data-item-index="${index}" aria-label="Increase quantity">+</button>
+          </div>
+          <div class="cart-item-price">
+            <span style="font-weight: 700; color: var(--text-main);">${formatCurrency(itemTotal)}</span>
+            <button type="button" class="btn-remove-item" data-item-index="${index}" aria-label="Remove item" style="color: var(--danger-color); background: none; border: none; font-size: 12px; font-weight: 600; cursor: pointer; padding: 4px 8px;">Remove</button>
+          </div>
         </div>
       </div>
     `;
