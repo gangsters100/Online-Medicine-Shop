@@ -533,7 +533,22 @@ function initCheckout() {
     if (e.target.classList.contains('btn-remove-item')) {
       const index = parseInt(e.target.dataset.itemIndex);
       const removedItem = checkoutState.cartItems[index];
+
+      // Remove from checkout state
       checkoutState.cartItems.splice(index, 1);
+
+      // Remove from cart module (localStorage) to sync with homepage
+      if (removedItem) {
+        const cartItems = cart.getItems();
+        const cartIndex = cartItems.findIndex(item =>
+          item.id === removedItem.id && item.name === removedItem.name
+        );
+        if (cartIndex !== -1) {
+          cartItems.splice(cartIndex, 1);
+          cart.items = cartItems;
+          cart.save();
+        }
+      }
 
       if (checkoutState.cartItems.length === 0) {
         showToast('Cart is empty. Redirecting...', 'warning');
