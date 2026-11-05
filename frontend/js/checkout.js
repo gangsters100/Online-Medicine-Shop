@@ -537,17 +537,6 @@ function initCheckout() {
       // Remove from checkout state
       checkoutState.cartItems.splice(index, 1);
 
-      // Remove from cart module (localStorage) to sync with homepage
-      if (removedItem) {
-        const cartIndex = cart.items.findIndex(item =>
-          item.id === removedItem.id && item.name === removedItem.name
-        );
-        if (cartIndex !== -1) {
-          cart.items.splice(cartIndex, 1);
-          cart.save();
-        }
-      }
-
       if (checkoutState.cartItems.length === 0) {
         showToast('Cart is empty. Redirecting...', 'warning');
         setTimeout(() => window.location.href = '../index.html', 2000);
