@@ -15,6 +15,18 @@ export const cart = {
     this.save();
   },
 
+  removeItem(index) {
+    if (index >= 0 && index < this.items.length) {
+      this.items.splice(index, 1);
+      this.save();
+    }
+  },
+
+  setItems(items) {
+    this.items = items || [];
+    this.save();
+  },
+
   getCount() {
     return this.items.length;
   },
