@@ -642,7 +642,7 @@ function setupProfileButton() {
       }
 
       // User is logged in, navigate to profile page
-      window.location.href = 'frontend/pages/profile.html';
+      window.location.href = 'pages/profile.html';
     });
   }
 }
