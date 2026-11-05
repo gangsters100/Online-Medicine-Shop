@@ -64,6 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const navItems = document.querySelectorAll('.profile-nav-item');
   const sections = document.querySelectorAll('.profile-section');
 
+  // Helper function to check if user is logged in
+  function checkUserAuth() {
+    return userData && userData.name;
+  }
+
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       const targetTab = item.dataset.tab;
@@ -78,9 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Check if user is logged in before allowing profile navigation
-      if (!userData || !userData.name) {
-        showToast('Please login or sign up to view your profile', 'warning');
-        setTimeout(() => window.location.href = '../pages/login.html', 1500);
+      if (!checkUserAuth()) {
+        // Show the same redirect dialog as when adding medicines to cart (from app.js)
+        // Check if showRedirectDialog is available (defined in app.js)
+        if (typeof window.showRedirectDialog === 'function') {
+          window.showRedirectDialog(
+            'Login Required',
+            'Redirecting to login page to view your profile...',
+            'frontend/pages/login.html',
+            3000
+          );
+        } else {
+          // Fallback to the original simple toast message
+          showToast('Please login or sign up to view your profile', 'warning');
+          setTimeout(() => window.location.href = 'frontend/pages/login.html', 1500);
+        }
         return;
       }
 

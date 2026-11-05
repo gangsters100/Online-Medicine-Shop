@@ -700,6 +700,25 @@ function initCheckout() {
       checkoutState.orderNumber = generateOrderNumber();
       checkoutState.orderDate = new Date();
 
+      // Save order to orderHistory
+      const order = {
+        orderNumber: checkoutState.orderNumber,
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
+              new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) + ' ' +
+              (new Date().getHours() >= 12 ? 'PM' : 'AM'),
+        itemsCount: checkoutState.cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0),
+        total: checkoutState.total,
+        status: 'Placed',
+        paymentMethod: paymentMethod.value === 'upi' ? 'UPI' :
+                      paymentMethod.value === 'card' ? 'Debit/Credit Card' :
+                      paymentMethod.value === 'netbanking' ? 'Net Banking' : 'Cash on Delivery'
+      };
+
+      // Add to order history
+      let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+      orderHistory.push(order);
+      localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
       // Clear cart in localStorage
       cart.items = [];
       cart.save();

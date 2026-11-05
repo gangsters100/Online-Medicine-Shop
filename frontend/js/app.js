@@ -108,6 +108,9 @@ async function initHomepage() {
   // Setup Prescription upload modal triggers
   setupPrescriptionTriggers();
 
+  // Setup Profile button authentication check
+  setupProfileButton();
+
   // Show loading skeleton for product catalog
   renderLoadingSkeleton('#product-container', 8);
 
@@ -613,6 +616,35 @@ function cleanupNavActiveState() {
   navLinks.forEach(link => {
     link.classList.remove('active');
   });
+}
+
+// Setup Profile button after homepage initialization
+function setupProfileButton() {
+  const profileBtn = document.querySelector('.profile-btn');
+  if (profileBtn) {
+    profileBtn.addEventListener('click', () => {
+      // Check if user is logged in
+      const userData = JSON.parse(sessionStorage.getItem('userData'));
+      if (!userData || !userData.name) {
+        // Show the same redirect dialog as when adding medicines to cart
+        if (typeof window.showRedirectDialog === 'function') {
+          window.showRedirectDialog(
+            'Login Required',
+            'Redirecting to login page to view your profile...',
+            '../pages/login.html',
+            3000
+          );
+        } else {
+          showToast('Please login or sign up to view your profile', 'warning');
+          setTimeout(() => window.location.href = '../pages/login.html', 1500);
+        }
+        return;
+      }
+
+      // User is logged in, navigate to profile page
+      window.location.href = 'frontend/pages/profile.html';
+    });
+  }
 }
 
 // Start application when DOM is ready

@@ -658,7 +658,7 @@ function logout() {
   sessionStorage.clear();
   localStorage.removeItem('cart');
   localStorage.removeItem('orderHistory');
-  window.location.href = '../index.html';
+  window.location.href = 'frontend/index.html';
 }
 
 window.logout = logout;
