@@ -70,8 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (targetTab === 'logout') {
         sessionStorage.clear();
+        localStorage.removeItem('cart');
+        localStorage.removeItem('orderHistory');
         showToast('Logged out successfully', 'success');
         setTimeout(() => window.location.href = '../index.html', 1000);
+        return;
+      }
+
+      // Check if user is logged in before allowing profile navigation
+      if (!userData || !userData.name) {
+        showToast('Please login or sign up to view your profile', 'warning');
+        setTimeout(() => window.location.href = '../pages/login.html', 1500);
         return;
       }
 

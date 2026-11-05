@@ -434,6 +434,17 @@ function showRedirectDialog(title, message, redirectUrl, delayMs) {
   const existing = document.getElementById('redirect-dialog-overlay');
   if (existing) existing.remove();
 
+  // If redirecting to login, ensure cart is cleared on logout
+  if (redirectUrl.includes('login.html')) {
+    const originalGoNowBtn = document.getElementById('redirect-now-btn');
+    if (originalGoNowBtn) {
+      originalGoNowBtn.addEventListener('click', () => {
+        localStorage.removeItem('cart');
+        localStorage.removeItem('orderHistory');
+      });
+    }
+  }
+
   const overlay = document.createElement('div');
   overlay.id = 'redirect-dialog-overlay';
   overlay.style.cssText = `
