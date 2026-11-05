@@ -84,8 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Check if user is logged in before allowing profile navigation
       if (!checkUserAuth()) {
-        // Show the same redirect dialog as when adding medicines to cart (from app.js)
-        // Check if showRedirectDialog is available (defined in app.js)
         if (typeof window.showRedirectDialog === 'function') {
           window.showRedirectDialog(
             'Login Required',
@@ -94,9 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
             3000
           );
         } else {
-          // Fallback to the original simple toast message
-          showToast('Please login or sign up to view your profile', 'warning');
-          setTimeout(() => window.location.href = 'login.html', 1500);
+          showRedirectDialog(
+            'Login Required',
+            'Redirecting to login page to view your profile...',
+            'login.html',
+            3000
+          );
         }
         return;
       }

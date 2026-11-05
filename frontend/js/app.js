@@ -627,12 +627,12 @@ function setupProfileButton() {
       const userData = JSON.parse(sessionStorage.getItem('userData'));
       if (!userData || !userData.name) {
         // Show the same redirect dialog as when adding medicines to cart
-        if (typeof window.showRedirectDialog === 'function') {
-          window.showRedirectDialog(
+        if (typeof showRedirectDialog === 'function') {
+          showRedirectDialog(
             'Login Required',
             'Redirecting to login page to view your profile...',
             'pages/login.html',
-            3000
+            5000
           );
         } else {
           showToast('Please login or sign up to view your profile', 'warning');
