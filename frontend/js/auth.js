@@ -650,3 +650,15 @@ function transitionToStep(stepName) {
 window.handlePhoneSubmit = handlePhoneSubmit;
 window.handlePasswordSubmit = handlePasswordSubmit;
 window.verifyOTP = verifyOTP;
+
+/**
+ * Logout function to clear all user session and cart data
+ */
+function logout() {
+  sessionStorage.clear();
+  localStorage.removeItem('cart');
+  localStorage.removeItem('orderHistory');
+  window.location.href = 'frontend/index.html';
+}
+
+window.logout = logout;

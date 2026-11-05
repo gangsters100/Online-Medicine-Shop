@@ -64,14 +64,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const navItems = document.querySelectorAll('.profile-nav-item');
   const sections = document.querySelectorAll('.profile-section');
 
+  // Helper function to check if user is logged in
+  function checkUserAuth() {
+    return userData && userData.name;
+  }
+
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       const targetTab = item.dataset.tab;
 
       if (targetTab === 'logout') {
         sessionStorage.clear();
+        localStorage.removeItem('cart');
+        localStorage.removeItem('orderHistory');
         showToast('Logged out successfully', 'success');
         setTimeout(() => window.location.href = '../index.html', 1000);
+        return;
+      }
+
+      // Check if user is logged in before allowing profile navigation
+      if (!checkUserAuth()) {
+        if (typeof window.showRedirectDialog === 'function') {
+          window.showRedirectDialog(
+            'Login Required',
+            'Redirecting to login page to view your profile...',
+            'login.html',
+            3000
+          );
+        } else {
+          showRedirectDialog(
+            'Login Required',
+            'Redirecting to login page to view your profile...',
+            'login.html',
+            3000
+          );
+        }
         return;
       }
 

@@ -537,19 +537,6 @@ function initCheckout() {
       // Remove from checkout state
       checkoutState.cartItems.splice(index, 1);
 
-      // Remove from cart module (localStorage) to sync with homepage
-      if (removedItem) {
-        const cartItems = cart.getItems();
-        const cartIndex = cartItems.findIndex(item =>
-          item.id === removedItem.id && item.name === removedItem.name
-        );
-        if (cartIndex !== -1) {
-          cartItems.splice(cartIndex, 1);
-          cart.items = cartItems;
-          cart.save();
-        }
-      }
-
       if (checkoutState.cartItems.length === 0) {
         showToast('Cart is empty. Redirecting...', 'warning');
         setTimeout(() => window.location.href = '../index.html', 2000);
@@ -701,6 +688,25 @@ function initCheckout() {
       checkoutState.paymentMethod = paymentMethod.value;
       checkoutState.orderNumber = generateOrderNumber();
       checkoutState.orderDate = new Date();
+
+      // Save order to orderHistory
+      const order = {
+        orderNumber: checkoutState.orderNumber,
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
+              new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) + ' ' +
+              (new Date().getHours() >= 12 ? 'PM' : 'AM'),
+        itemsCount: checkoutState.cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0),
+        total: checkoutState.total,
+        status: 'Placed',
+        paymentMethod: paymentMethod.value === 'upi' ? 'UPI' :
+                      paymentMethod.value === 'card' ? 'Debit/Credit Card' :
+                      paymentMethod.value === 'netbanking' ? 'Net Banking' : 'Cash on Delivery'
+      };
+
+      // Add to order history
+      let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+      orderHistory.push(order);
+      localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
 
       // Clear cart in localStorage
       cart.items = [];
