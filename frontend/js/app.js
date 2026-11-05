@@ -54,11 +54,11 @@ function checkAuthState() {
     sessionStorage.setItem('userData', JSON.stringify(userData));
   }
 
-  const loginBtn = document.querySelector('a[href="pages/login.html"]');
+  const loginBtn = document.querySelector('a[href="frontend/pages/login.html"]');
   if (!loginBtn) return;
 
   if (userData && userData.name) {
-    loginBtn.href = 'pages/profile.html';
+    loginBtn.href = 'frontend/pages/profile.html';
     loginBtn.title = 'View your profile and orders';
     loginBtn.innerHTML = `
       <span style="font-size: 14px; margin-right: 4px;">👤</span>
@@ -75,7 +75,7 @@ function checkAuthState() {
       e.preventDefault();
       showToast('Please login or sign up to view your profile', 'warning');
       setTimeout(() => {
-        window.location.href = 'pages/login.html';
+        window.location.href = 'frontend/pages/login.html';
       }, 5200);
     });
   }
@@ -375,7 +375,7 @@ function setupProductCardInteractions() {
         showToast('Please login or signup first to add items to cart', 'warning');
 
         // Show redirect dialog with countdown
-        showRedirectDialog('Login Required', 'Redirecting to login page...', './pages/login.html', 5500);
+        showRedirectDialog('Login Required', 'Redirecting to login page...', 'frontend/pages/login.html', 5500);
         return;
       }
 
@@ -413,7 +413,7 @@ function setupProductCardInteractions() {
         showToast('Please login or signup first to add items to cart', 'warning');
 
         // Show redirect dialog with countdown
-        showRedirectDialog('Login Required', 'Redirecting to login page...', './pages/login.html', 5500);
+        showRedirectDialog('Login Required', 'Redirecting to login page...', 'frontend/pages/login.html', 5500);
         return;
       }
 
@@ -631,12 +631,12 @@ function setupProfileButton() {
           window.showRedirectDialog(
             'Login Required',
             'Redirecting to login page to view your profile...',
-            '../pages/login.html',
+            'frontend/pages/login.html',
             3000
           );
         } else {
           showToast('Please login or sign up to view your profile', 'warning');
-          setTimeout(() => window.location.href = '../pages/login.html', 1500);
+          setTimeout(() => window.location.href = 'frontend/pages/login.html', 1500);
         }
         return;
       }
