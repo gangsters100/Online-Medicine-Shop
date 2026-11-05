@@ -90,13 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
           window.showRedirectDialog(
             'Login Required',
             'Redirecting to login page to view your profile...',
-            'frontend/pages/login.html',
+            'login.html',
             3000
           );
         } else {
           // Fallback to the original simple toast message
           showToast('Please login or sign up to view your profile', 'warning');
-          setTimeout(() => window.location.href = 'frontend/pages/login.html', 1500);
+          setTimeout(() => window.location.href = 'login.html', 1500);
         }
         return;
       }
