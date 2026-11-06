@@ -619,13 +619,18 @@ function setupProfileButton() {
       // Check if user is logged in
       const userData = JSON.parse(sessionStorage.getItem('userData'));
       if (!userData || !userData.name) {
-        // Show redirect dialog with countdown
-        showRedirectDialog(
-          'Login Required',
-          'Redirecting to login page to view your profile...',
-          'pages/login.html',
-          5000
-        );
+        // Show redirect dialog with countdown - only if function exists
+        if (typeof showRedirectDialog === 'function') {
+          showRedirectDialog(
+            'Login Required',
+            'Redirecting to login page to view your profile...',
+            'pages/login.html',
+            5000
+          );
+        } else {
+          showToast('Please login or sign up to view your profile', 'warning');
+          setTimeout(() => window.location.href = 'pages/login.html', 1500);
+        }
         return;
       }
 
@@ -639,5 +644,12 @@ function setupProfileButton() {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initHomepage);
 } else {
-  initHomepage();
+  // Ensure auth state is set before initHomepage runs
+  const userData = JSON.parse(sessionStorage.getItem('userData'));
+  if (!userData || !userData.name) {
+    // Redirect to login if user is not authenticated
+    window.location.href = 'pages/login.html';
+  } else {
+    initHomepage();
+  }
 }
