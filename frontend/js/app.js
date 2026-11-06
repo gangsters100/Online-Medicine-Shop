@@ -54,30 +54,22 @@ function checkAuthState() {
     sessionStorage.setItem('userData', JSON.stringify(userData));
   }
 
-  const loginBtn = document.querySelector('a[href="pages/login.html"]');
-  if (!loginBtn) return;
+  const profileBtn = document.querySelector('.profile-btn') || document.querySelector('a[href="pages/login.html"]');
+  if (!profileBtn) return;
 
   if (userData && userData.name) {
-    loginBtn.href = 'frontend/pages/profile.html';
-    loginBtn.title = 'View your profile and orders';
-    loginBtn.innerHTML = `
+    const firstName = userData.name.split(' ')[0];
+    profileBtn.title = 'View your profile and orders';
+    profileBtn.innerHTML = `
       <span style="font-size: 14px; margin-right: 4px;">👤</span>
-      <span>${userData.name.split(' ')[0]}</span>
+      <span>${firstName}</span>
     `;
   } else {
-    loginBtn.href = '#';
-    loginBtn.title = 'Please login or sign up';
-    loginBtn.innerHTML = `
+    profileBtn.title = 'Please login or sign up';
+    profileBtn.innerHTML = `
       <span style="font-size: 14px; margin-right: 4px;">👤</span>
       <span>Profile</span>
     `;
-    loginBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      showToast('Please login or sign up to view your profile', 'warning');
-      setTimeout(() => {
-        window.location.href = 'pages/login.html';
-      }, 5200);
-    });
   }
 }
 
@@ -620,24 +612,20 @@ function cleanupNavActiveState() {
 
 // Setup Profile button after homepage initialization
 function setupProfileButton() {
-  const profileBtn = document.querySelector('.profile-btn');
+  const profileBtn = document.querySelector('.profile-btn') || document.querySelector('a[href="pages/login.html"]');
   if (profileBtn) {
-    profileBtn.addEventListener('click', () => {
+    profileBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       // Check if user is logged in
       const userData = JSON.parse(sessionStorage.getItem('userData'));
       if (!userData || !userData.name) {
-        // Show the same redirect dialog as when adding medicines to cart
-        if (typeof showRedirectDialog === 'function') {
-          showRedirectDialog(
-            'Login Required',
-            'Redirecting to login page to view your profile...',
-            'pages/login.html',
-            5000
-          );
-        } else {
-          showToast('Please login or sign up to view your profile', 'warning');
-          setTimeout(() => window.location.href = 'pages/login.html', 1500);
-        }
+        // Show redirect dialog with countdown
+        showRedirectDialog(
+          'Login Required',
+          'Redirecting to login page to view your profile...',
+          'pages/login.html',
+          5000
+        );
         return;
       }
 
