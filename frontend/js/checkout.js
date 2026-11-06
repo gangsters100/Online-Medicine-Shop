@@ -516,6 +516,7 @@ function initCheckout() {
       checkoutState.cartItems[index].quantity = (checkoutState.cartItems[index].quantity || 1) + 1;
       checkoutState.calculateTotals();
       renderCartItems();
+      cart.setItems(checkoutState.cartItems);
       showToast('Quantity updated', 'success');
     }
 
@@ -525,6 +526,7 @@ function initCheckout() {
         checkoutState.cartItems[index].quantity = (checkoutState.cartItems[index].quantity || 1) - 1;
         checkoutState.calculateTotals();
         renderCartItems();
+        cart.setItems(checkoutState.cartItems);
         showToast('Quantity updated', 'success');
       }
     }
@@ -536,6 +538,7 @@ function initCheckout() {
 
       // Remove from checkout state
       checkoutState.cartItems.splice(index, 1);
+      cart.setItems(checkoutState.cartItems);
 
       if (checkoutState.cartItems.length === 0) {
         showToast('Cart is empty. Redirecting...', 'warning');
