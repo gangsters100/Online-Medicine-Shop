@@ -11,7 +11,13 @@ export const cart = {
   },
 
   addItem(product) {
-    this.items.push(product);
+    const existingItem = this.items.find(item => item.id === product.id);
+    if (existingItem) {
+      existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+      // Ensure every item has a quantity of at least 1
+      this.items.push({ ...product, quantity: 1 });
+    }
     this.save();
   },
 
@@ -28,11 +34,10 @@ export const cart = {
   },
 
   getCount() {
-    return this.items.length;
+    return this.items.reduce((total, item) => total + (item.quantity || 1), 0);
   },
 
   getItems() {
     return [...this.items];
   }
 };
-
