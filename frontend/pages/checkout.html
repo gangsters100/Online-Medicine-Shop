@@ -225,6 +225,18 @@
             <p class="form-error" id="error-pin-code"></p>
           </div>
 
+          <!-- Prescription Upload Section (Pharmacy Feature) -->
+          <div class="form-group prescription-group" id="prescription-section" style="display: none;">
+            <label>Doctor's Prescription (Required)</label>
+            <p class="form-hint">Some medicines in your cart require a valid prescription</p>
+            <div class="file-upload-wrapper" style="border: 2px dashed var(--border-color); padding: 20px; text-align: center; border-radius: 8px; background: var(--bg-light);">
+              <input type="file" id="prescription-file" accept="image/*,.pdf" style="display: none;" />
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('prescription-file').click()">Choose File</button>
+              <div id="file-name-display" class="file-name" style="margin-top: 10px; font-size: 13px; color: var(--text-light);">No file selected</div>
+            </div>
+            <p class="form-error" id="error-prescription"></p>
+          </div>
+
           <!-- Save Address Checkbox -->
           <div class="form-group checkbox-group">
             <label class="checkbox-label">
