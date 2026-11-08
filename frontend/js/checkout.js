@@ -6,19 +6,14 @@
 
 import { cart } from './cart.js';
 import { mockMedicines } from './data.js';
-import { showToast } from './ui.js';
+import { showToast, openModal, closeModal } from './ui.js';
 
 // ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
 
-/**
- * Resolve image paths for subpages
- * Converts ./images/... to ../images/... when on subpages like pages/checkout.html
- */
 function resolveImagePath(imagePath) {
   if (!imagePath) return imagePath;
-
   if (imagePath.startsWith('data:')) return imagePath;
   if (imagePath.startsWith('http')) return imagePath;
 
@@ -28,13 +23,9 @@ function resolveImagePath(imagePath) {
   if (isSubpage && imagePath.startsWith('./images/')) {
     return imagePath.replace('./images/', '../images/');
   }
-
   return imagePath;
 }
 
-/**
- * Checks if any item in the current cart requires a prescription
- */
 function checkPrescriptionRequired() {
   return checkoutState.cartItems.some(item => {
     const medicine = mockMedicines.find(m => m.id === item.id);
@@ -48,39 +39,53 @@ function checkPrescriptionRequired() {
 
 const checkoutState = {
   currentStep: 'cart', 
-
   cartItems: [],
-
-  address: {
-    fullName: '',
-    phone: '',
-    street: '',
-    city: '',
-    state: '',
-    pinCode: ''
-  },
-
+  address: { fullName: '', phone: '', street: '', city: '', state: '', pinCode: '' },
   paymentMethod: 'cod',
   couponCode: '',
-
   subtotal: 0,
   tax: 0,
   shipping: 0,
   discount: 0,
   total: 0,
-
   orderNumber: '',
   orderDate: new Date(),
 
+  /**
+   * Foolproof empty cart handler
+   */
+  handleEmptyCart() {
+    // 1. Show a Toast immediately
+    showToast('Your cart is empty. Redirecting to home...', 'warning');
+
+    // 2. Show a Modal for high visibility
+    openModal({
+      title: 'Empty Cart',
+      bodyHtml: '<p style="text-align: center; font-size: 15px; color: var(--text-light);">Your shopping cart is currently empty. We are redirecting you back to the store so you can find your medicines.</p>',
+      footerButtons: [
+        {
+          text: 'Go to Home Now',
+          className: 'btn btn-primary btn-sm',
+          onClick: () => { window.location.href = '../index.html'; }
+        }
+      ]
+    });
+
+    // 3. Forced redirection after 3 seconds
+    setTimeout(() => {
+      window.location.href = '../index.html';
+    }, 3000);
+  },
+
   init() {
     const cartItems = cart.getItems();
-    if (cartItems.length === 0) {
-      showToast('Your cart is empty. Redirecting to home...', 'warning');
-      setTimeout(() => window.location.href = '../index.html', 2000);
-      return;
+    this.cartItems = cartItems;
+    
+    if (this.cartItems.length === 0) {
+      this.handleEmptyCart();
+      return false;
     }
 
-    this.cartItems = cartItems;
     this.calculateTotals();
 
     const userData = JSON.parse(sessionStorage.getItem('userData')) || {};
@@ -91,6 +96,7 @@ const checkoutState = {
     if (savedAddress.fullName) {
       Object.assign(this.address, savedAddress);
     }
+    return true;
   },
 
   calculateTotals() {
@@ -98,7 +104,6 @@ const checkoutState = {
       const medicine = mockMedicines.find(m => m.id === item.id);
       return sum + ((medicine?.price || 0) * (item.quantity || 1));
     }, 0);
-
     this.tax = this.subtotal * 0.05;
     this.shipping = 0;
     this.total = this.subtotal + this.tax - this.discount;
@@ -131,26 +136,11 @@ const mockCoupons = {
 // VALIDATION FUNCTIONS
 // ============================================================================
 
-function validateFullName(name) {
-  return /^[a-zA-Z\s]{3,50}$/.test(name.trim());
-}
-
-function validatePhone(phone) {
-  return /^[6-9]\d{9}$/.test(phone.trim());
-}
-
-function validateStreet(street) {
-  return street.trim().length >= 5 && street.trim().length <= 100;
-}
-
-function validateCity(city) {
-  return /^[a-zA-Z\s]{2,50}$/.test(city.trim());
-}
-
-function validateState(state) {
-  return state.trim().length > 0;
-}
-
+function validateFullName(name) { return /^[a-zA-Z\s]{3,50}$/.test(name.trim()); }
+function validatePhone(phone) { return /^[6-9]\d{9}$/.test(phone.trim()); }
+function validateStreet(street) { return street.trim().length >= 5 && street.trim().length <= 100; }
+function validateCity(city) { return /^[a-zA-Z\s]{2,50}$/.test(city.trim()); }
+function validateState(state) { return state.trim().length > 0; }
 function validatePinCode(pinCode) {
   const pinRegex = /^\d{6}$/;
   if (!pinRegex.test(pinCode)) return false;
@@ -158,12 +148,8 @@ function validatePinCode(pinCode) {
   return pinNum >= 100000 && pinNum <= 999999;
 }
 
-/**
- * Validate if prescription is uploaded when required
- */
 function validatePrescription() {
   if (!checkPrescriptionRequired()) return { valid: true };
-
   const fileInput = document.getElementById('prescription-file');
   if (!fileInput || fileInput.files.length === 0) {
     return { valid: false, message: 'Please upload a valid doctor\'s prescription' };
@@ -233,7 +219,6 @@ function formatOrderDate(date) {
 function renderCartItems() {
   const container = document.getElementById('cart-items');
   if (!container) return;
-
   if (checkoutState.cartItems.length === 0) {
     container.innerHTML = '<p>Your cart is empty</p>';
     return;
@@ -242,11 +227,8 @@ function renderCartItems() {
   container.innerHTML = checkoutState.cartItems.map((item, index) => {
     const medicine = mockMedicines.find(m => m.id === item.id);
     if (!medicine) return '';
-
     const itemTotal = medicine.price * (item.quantity || 1);
     const imagePath = resolveImagePath(medicine.imageUrl);
-    
-    // Rx Badge for prescription medicines
     const rxBadge = medicine.prescriptionRequired 
       ? \`<span class="rx-badge" style="background: #ef4444; color: white; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 4px; margin-left: 8px; vertical-align: middle;">Rx</span>\` 
       : '';
@@ -275,7 +257,6 @@ function renderCartItems() {
       </div>
     \`;
   }).join('');
-
   updateCartTotals();
 }
 
@@ -298,7 +279,6 @@ function renderConfirmation() {
   document.getElementById('order-number').textContent = checkoutState.orderNumber;
   document.getElementById('order-date').textContent = formatOrderDate(checkoutState.orderDate);
   document.getElementById('estimated-delivery').textContent = calculateEstimatedDelivery();
-
   const deliveryAddress = document.getElementById('delivery-summary');
   if (deliveryAddress) {
     deliveryAddress.innerHTML = \`
@@ -310,7 +290,6 @@ function renderConfirmation() {
       </div>
     \`;
   }
-
   const itemsText = \`\${checkoutState.cartItems.length} medicine\${checkoutState.cartItems.length > 1 ? 's' : ''}\`;
   document.getElementById('items-count').textContent = itemsText;
   document.getElementById('final-total').textContent = formatCurrency(checkoutState.total);
@@ -328,18 +307,15 @@ function renderConfirmation() {
 function transitionToStep(stepName) {
   const validSteps = ['cart', 'address', 'payment', 'confirmation'];
   if (!validSteps.includes(stepName)) return;
-
   document.querySelectorAll('.checkout-step').forEach(step => step.classList.remove('active'));
   const targetStep = document.getElementById(\`\${stepName}-step\`);
   if (targetStep) targetStep.classList.add('active');
-
   document.querySelectorAll('.step-item').forEach(item => {
     item.classList.remove('active', 'completed');
     const itemStep = item.dataset.step;
     if (itemStep === stepName) item.classList.add('active');
     else if (validSteps.indexOf(itemStep) < validSteps.indexOf(stepName)) item.classList.add('completed');
   });
-
   checkoutState.currentStep = stepName;
   checkoutState.save();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -350,11 +326,12 @@ function transitionToStep(stepName) {
 // ============================================================================
 
 function initCheckout() {
-  checkoutState.init();
+  const initialized = checkoutState.init();
+  if (!initialized) return; 
+
   renderCartItems();
   updatePaymentSummary();
 
-  // ========== PRESCRIPTION LOGIC ==========
   const prescriptionSection = document.getElementById('prescription-section');
   if (prescriptionSection) {
     const needsPrescription = checkPrescriptionRequired();
@@ -377,7 +354,6 @@ function initCheckout() {
     });
   }
 
-  // ========== CART STEP ==========
   document.addEventListener('click', (e) => {
     if (e.target.classList.contains('qty-plus')) {
       const index = parseInt(e.target.dataset.itemIndex);
@@ -387,7 +363,6 @@ function initCheckout() {
       cart.setItems(checkoutState.cartItems);
       showToast('Quantity updated', 'success');
     }
-
     if (e.target.classList.contains('qty-minus')) {
       const index = parseInt(e.target.dataset.itemIndex);
       if ((checkoutState.cartItems[index].quantity || 1) > 1) {
@@ -398,15 +373,12 @@ function initCheckout() {
         showToast('Quantity updated', 'success');
       }
     }
-
     if (e.target.classList.contains('btn-remove-item')) {
       const index = parseInt(e.target.dataset.itemIndex);
       checkoutState.cartItems.splice(index, 1);
       cart.setItems(checkoutState.cartItems);
-
       if (checkoutState.cartItems.length === 0) {
-        showToast('Cart is empty. Redirecting...', 'warning');
-        setTimeout(() => window.location.href = '../index.html', 2000);
+        checkoutState.handleEmptyCart();
       } else {
         checkoutState.calculateTotals();
         renderCartItems();
@@ -419,14 +391,13 @@ function initCheckout() {
   if (cartContinueBtn) {
     cartContinueBtn.addEventListener('click', () => {
       if (checkoutState.cartItems.length === 0) {
-        showToast('Please add at least 1 item to cart', 'warning');
+        checkoutState.handleEmptyCart();
         return;
       }
       transitionToStep('address');
     });
   }
 
-  // ========== ADDRESS STEP ==========
   const addressBackBtn = document.getElementById('address-back');
   if (addressBackBtn) {
     addressBackBtn.addEventListener('click', () => transitionToStep('cart'));
@@ -437,14 +408,9 @@ function initCheckout() {
     addressContinueBtn.addEventListener('click', () => {
       const addressErrors = validateAddress();
       const prescriptionValidation = validatePrescription();
-
       document.querySelectorAll('.form-error').forEach(el => el.textContent = '');
-
       if (Object.keys(addressErrors).length > 0) {
-        const fieldToErrorId = {
-          'fullName': 'error-full-name', 'phone': 'error-phone', 'street': 'error-street',
-          'city': 'error-city', 'state': 'error-state', 'pinCode': 'error-pin-code'
-        };
+        const fieldToErrorId = { 'fullName': 'error-full-name', 'phone': 'error-phone', 'street': 'error-street', 'city': 'error-city', 'state': 'error-state', 'pinCode': 'error-pin-code' };
         for (const [field, message] of Object.entries(addressErrors)) {
           const errorEl = document.getElementById(fieldToErrorId[field]);
           if (errorEl) errorEl.textContent = message;
@@ -452,30 +418,25 @@ function initCheckout() {
         showToast('Please fix the errors in the form', 'warning');
         return;
       }
-
       if (!prescriptionValidation.valid) {
         const errorEl = document.getElementById('error-prescription');
         if (errorEl) errorEl.textContent = prescriptionValidation.message;
         showToast(prescriptionValidation.message, 'warning');
         return;
       }
-
       checkoutState.address.fullName = document.getElementById('full-name').value;
       checkoutState.address.phone = document.getElementById('phone').value;
       checkoutState.address.street = document.getElementById('street').value;
       checkoutState.address.city = document.getElementById('city').value;
       checkoutState.address.state = document.getElementById('state').value;
       checkoutState.address.pinCode = document.getElementById('pin-code').value;
-
       if (document.getElementById('save-address').checked) {
         sessionStorage.setItem('savedAddress', JSON.stringify(checkoutState.address));
       }
-
       transitionToStep('payment');
     });
   }
 
-  // ========== PAYMENT STEP ==========
   const applyCouponBtn = document.getElementById('apply-coupon');
   if (applyCouponBtn) {
     applyCouponBtn.addEventListener('click', () => {
@@ -485,24 +446,20 @@ function initCheckout() {
         showToast('Please enter a coupon code', 'warning');
         return;
       }
-
       const validation = validateCoupon(code);
       const errorEl = document.getElementById('error-coupon');
       const successEl = document.getElementById('success-coupon');
-
       if (!validation.valid) {
         errorEl.textContent = validation.message;
         successEl.textContent = '';
         showToast(validation.message, 'warning');
         return;
       }
-
       checkoutState.couponCode = code;
       const coupon = validation.coupon;
       checkoutState.discount = coupon.discountType === 'percentage' 
         ? (checkoutState.subtotal * coupon.discountValue) / 100 
         : coupon.discountValue;
-
       checkoutState.calculateTotals();
       updatePaymentSummary();
       errorEl.textContent = '';
@@ -526,11 +483,9 @@ function initCheckout() {
         showToast('Please select a payment method', 'warning');
         return;
       }
-
       checkoutState.paymentMethod = paymentMethod.value;
       checkoutState.orderNumber = generateOrderNumber();
       checkoutState.orderDate = new Date();
-
       const order = {
         orderNumber: checkoutState.orderNumber,
         date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
@@ -543,14 +498,11 @@ function initCheckout() {
                       paymentMethod.value === 'card' ? 'Debit/Credit Card' :
                       paymentMethod.value === 'netbanking' ? 'Net Banking' : 'Cash on Delivery'
       };
-
       let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
       orderHistory.push(order);
       localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-
       cart.items = [];
       cart.save();
-
       renderConfirmation();
       transitionToStep('confirmation');
       showToast('Order placed successfully!', 'success');
