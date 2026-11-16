@@ -14,3 +14,6 @@ A long-term full-stack web project for a Medicine Shop.
 ## Current Phase: Frontend Development (Mock Data)
 - Implementing UI based on Figma: https://www.figma.com/make/qIJYto4tHhBJ0GUP8HCqyQ/Enhance-Online-Medicine-Shop-UI?t=FN2p6E8MFT3czpdl-1
 - Using mock data in `frontend/js/data.js` to simulate API endpoints.
+
+## Git Policy
+- **No push**: Claude must never run `git push` or any remote git operations (push, PR creation, etc.). Only the user pushes to remote. Local commits are allowed when the user asks.

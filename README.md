@@ -64,38 +64,15 @@ Medicine-Shop/
 
 ## 🚀 Quick Start
 
-### View Live Pages
-
-**Homepage:**
-```bash
-http://localhost:8000/frontend/pages/index.html
-```
-
-**Test Login:**
-```bash
-http://localhost:8000/frontend/pages/login.html
-```
-- Phone: `9876543210`
-- Password: `testpass123` (any 8+ chars)
-- OTP: displayed in console & toast
-
-**Test Signup:**
-```bash
-http://localhost:8000/frontend/pages/signup.html
-```
-- All fields required
-- Same OTP game as login
-
 ### Local Development
 
-```bash
-# Start HTTP server
-cd frontend
-python3 -m http.server 8000
+Open the project in **VS Code** and use the **Live Server** extension (or any static web server) to serve the `frontend/` directory:
 
-# Open browser
-http://localhost:8000
-```
+- **Homepage:** `frontend/index.html`
+- **Login Page:** `frontend/pages/login.html`
+- **Signup Page:** `frontend/pages/signup.html`
+- **Checkout Page:** `frontend/pages/checkout.html`
+- **Profile Page:** `frontend/pages/profile.html`
 
 ---
 
@@ -110,22 +87,7 @@ http://localhost:8000
 - **[🆕 Authentication Module](/docs/AUTH_MODULE.md)** - Complete auth guide with code examples, diagrams, and testing checklist
 
 ## 🎯 In Progress / Upcoming
-
-### Next: Checkout Flow (Member 4)
-- Address input & validation
-- Prescription upload
-- Coupon code system
-- Payment gateway integration
-
-### Future: User Profile (Member X)
-- Order history
-- Saved addresses
-- Wishlist management
-
-### Future: Additional Features
-- Password reset flow
-- Email verification
-- Two-factor authentication
+- Future backend migration (Spring Boot + PostgreSQL planned for 6 months).
 
 ---
 
@@ -136,8 +98,8 @@ http://localhost:8000
 | **Authentication** | ✅ Complete | Member 4 | 1100+ | ✅ |
 | **Homepage** | ✅ Complete | Member 1 | - | - |
 | **Catalog** | ✅ Complete | Member 1 | - | - |
-| **Checkout** | 🟡 Next | Member 4 | - | - |
-| **User Profile** | ⏳ Planned | TBD | - | - |
+| **Checkout** | ✅ Complete | Member 4 | 600+ | ✅ |
+| **User Profile & Orders** | ✅ Complete | Member 4 | 300+ | ✅ |
 
 ---
 
@@ -165,4 +127,4 @@ All 7 bugs identified and resolved:
 *Created by: Soham Shinde, Arindam Sarkar, Adithya H K, Muhammad Abrar Aamir Sheikh*
 
 **Current Phase:** Frontend Development with Design-First Approach  
-**Last Updated:** 2026-10-31
+**Last Updated:** 2026-11-09
